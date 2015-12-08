@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php echo $config['app_title'];?></title>
+        <title><?php echo $config['app_title'];?> - Test</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="<?php echo $config['base_url'];?>img/favicon.ico">
