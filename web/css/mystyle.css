@@ -1,0 +1,8 @@
+.navbar-nav li.divider{
+    margin-top:15px;
+    width:1px;
+    height:30px;
+    background: #ccc;
+    margin-left: 2px;
+    margin-right: 2px;
+}
