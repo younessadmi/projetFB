@@ -32,9 +32,7 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav navbar-right">
                             <li class="active"><a href="#"><i class="fa fa-gamepad fa-2x"></i></a></li>
-                            <li class="divider"></li>
                             <li><a href="#"><i class="fa fa-trophy fa-2x"></i></a></li>
-                            <li class="divider"></li>
                             <li><a href="#"><i class="fa fa-cog fa-2x"></i></a></li>
                         </ul>
                     </div>
