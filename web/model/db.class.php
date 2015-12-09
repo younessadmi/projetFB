@@ -23,7 +23,7 @@ class DB {
         $this->registry = $registry;
         try
         {
-            $this->connexion = new PDO($this->registry->dbinfo['dbtype'].":host=".$this->registry->dbinfo['dbhost'].";port=".$this->registry->dbinfo['dbport'].";dbname=".$this->registry->dbinfo['dbname'], $this->registry->dbinfo['dbuser'], $this->registry->dbinfo['dbpassword']);
+            $this->connexion = new PDO(DB_TYPE.":host=".DB_HOST.";port=".DB_PORT.";dbname=".DB_NAME, DB_USER, DB_PASSWORD);
         }catch(PDOException $e)
         {
             print "Error new PDO: ".$e->getMessage()."<br/>";

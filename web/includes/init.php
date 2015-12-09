@@ -23,10 +23,6 @@ if(file_exists($conf_file))
     include $conf_file;
 }
 
-$registry->config = $config;
-$registry->dbinfo = $db;
-$registry->fb = $fb;
-
 $registry->db = DB::getInstance($registry);
 $registry->fb = FB::getInstance($registry);
 ?>

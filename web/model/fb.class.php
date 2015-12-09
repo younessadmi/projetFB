@@ -22,9 +22,9 @@ class FB {
     private function __construct($registry) {
         require_once __SITE_PATH.'/includes/facebook-php-sdk-v4-5.0.0/src/Facebook/autoload.php';
         $this->fb = new Facebook\Facebook([
-            'app_id' => $registry->fb['APP_ID'],
-            'app_secret' => $registry->fb['APP_SECRET'],
-            'default_graph_version' => $registry->fb['GRAPH_VERSION'],
+            'app_id' => APP_ID,
+            'app_secret' => APP_SECRET,
+            'default_graph_version' => GRAPH_VERSION
         ]);
         $this->registry = $registry;
     }
@@ -40,8 +40,8 @@ class FB {
         //        $graphObject = $response->getGraphObject();
         //        return $graphObject;
         //////////////////////
-        $response = $this->fb->get('/'.$this->registry->fb['APP_ID'].'/roles');
-        return $response->getGraphEdge()->asArray();        
+        $response = $this->fb->get('/'.APP_ID.'/roles');
+        return $response->getGraphEdge();
     }
 
     public function is_admin($id_user){
