@@ -1,8 +1,9 @@
 <?php
 
-#$config['base_url'] = 'http://projetfb.local/'; #en local
-#$config['base_url'] = 'http://projetfb.local:8888/'; #en local MAC
-$config['base_url'] = 'https://investigator.herokuapp.com/'; #en prod
+if($_SERVER['HTTP_HOST'] == 'projetfb.local'){
+    $config['base_url'] = 'http://projetfb.local/';
+}else $config['base_url'] = 'https://investigator.herokuapp.com/'; #en prod
+
 $config['app_title'] = 'Quizz concours';
 $config['app_version']  = '';
 $config['logDirectory'] = DIRECTORY_SEPARATOR.'logs'.DIRECTORY_SEPARATOR;
