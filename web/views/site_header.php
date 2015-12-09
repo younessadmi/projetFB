@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php echo $config['app_title'];?> - Test</title>
+        <title><?php echo APP_TITLE;?> - Test</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="<?php echo $config['base_url'];?>img/favicon.ico">
+        <link rel="icon" href="<?php echo BASE_URL;?>img/favicon.ico">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link href="<?php echo $config['base_url'];?>css/mystyle.css" rel="stylesheet" type="text/css">
+        <link href="<?php echo BASE_URL;?>css/mystyle.css" rel="stylesheet" type="text/css">
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src='<?php echo $config['base_url'];?>js/functions.js' ></script>
+        <script src='<?php echo BASE_URL;?>js/functions.js' ></script>
         <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' ></script>
     </head>
     <body>

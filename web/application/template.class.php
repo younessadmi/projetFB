@@ -24,7 +24,7 @@ Class template {
             throw new Exception('Template not found in '. $path);
             return false;
         }
-        $this->config = $this->registry->config;
+//        $this->config = $this->registry->config;
 
         foreach ($this->vars as $key => $value)
         {
