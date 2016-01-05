@@ -10,8 +10,7 @@ Class template {
 
     }
 
-    public function __set($index, $value)
-    {
+    public function __set($index, $value){
         $this->vars[$index] = $value;
     }
 

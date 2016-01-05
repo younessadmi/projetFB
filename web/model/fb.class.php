@@ -26,25 +26,36 @@ class FB {
             'app_secret' => APP_SECRET,
             'default_graph_version' => GRAPH_VERSION
         ]);
+        $this->fb->setDefaultAccessToken(APP_ACCESS_TOKEN);
+
+        if(!$this->is_user_connected()){
+            die('Not connected');
+        }
+        if(!$this->is_app_allowed()){
+            die('Permission denied');
+        }
+
         $this->registry = $registry;
     }
 
+    private function is_user_connected(){
+        return true;
+        //on verra si on a besoin de checker la connexion ou pas
+    }
+    private function is_app_allowed(){
+        return true;
+    }
+
     public function get_roles(){
-        //        $request = new FacebookRequest(
-        //            $session,
-        //            'GET',
-        //            '/'.$this->registry->fb['APP_ID'].'/roles'
-        //        );
-        //
-        //        $response = $request->execute();
-        //        $graphObject = $response->getGraphObject();
-        //        return $graphObject;
-        //////////////////////
         $response = $this->fb->get('/'.APP_ID.'/roles');
-        return $response->getGraphEdge();
+        return $response->getGraphEdge()->asArray();
     }
 
     public function is_admin($id_user){
-        $admins = $this->get_roles();        
+        $admins = $this->get_roles();
+    }
+
+    public function get_user_token(){
+
     }
 }

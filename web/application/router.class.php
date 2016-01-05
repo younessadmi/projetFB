@@ -30,7 +30,7 @@ class router {
         if (is_readable($this->file) == false)
         {
             $this->registry->template->show('not_found');
-            die ();
+            die();
         }
 
         include $this->file;
