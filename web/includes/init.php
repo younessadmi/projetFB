@@ -23,7 +23,7 @@ if(file_exists($conf_file))
     include $conf_file;
 }
 
-$registry->myFunctions = MYFUNCTIONS::getInstance($registry);
+$registry->myFunctions = myFunctions::getInstance($registry);
 $registry->db = DB::getInstance($registry);
 $registry->fb = FB::getInstance($registry);
 ?>
