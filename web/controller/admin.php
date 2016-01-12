@@ -53,11 +53,19 @@ class adminController{
                     }
                 }
                 if($toReady){
+                    $success = true;
                     for($i=1; $i <= $_POST['nbQuestions']; $i++){
                         if($this->registry->db->addQuestion($_POST['idQuizz'], $_POST[$i.'__question'], $_POST[$i.'__right-answer'], $_POST[$i.'__wrong-answer']) === true){
-                            $this->registry->template->success = 'cool';
-                        }else $this->registry->template->error = $this->registry->db->getLastError();
+
+                        }else{
+                            $success = false;
+                            $this->registry->template->error = $this->registry->db->getLastError();
+                            break;
+                        }
                     }
+                    if($this->registry->db->toggleQuizzEnabled($_POST['idQuizz'])){
+                        $this->registry->template->success = 'Le quizz a été correctement ajouté !';
+                    }else $this->registry->template->error = $this->registry->db->getLastError();
                 }else{
                     $this->registry->template->error = 'Les champs ne sont pas tous complet';
                     $this->registry->template->idQuizz = $_POST['idQuizz'];
