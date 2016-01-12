@@ -5,7 +5,7 @@ include __SITE_PATH.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'route
 include __SITE_PATH.DIRECTORY_SEPARATOR.'application'.DIRECTORY_SEPARATOR.'template.class.php';
 
 function __autoload($class_name) {
-    $filename = strtolower($class_name) . '.class.php';
+    $filename = $class_name . '.class.php';
     $file = __SITE_PATH.DIRECTORY_SEPARATOR.'model'.DIRECTORY_SEPARATOR.$filename;
 
     if(file_exists($file) == false)
