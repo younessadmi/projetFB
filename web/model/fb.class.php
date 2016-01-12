@@ -1,5 +1,5 @@
 <?php
-class FB {
+class fb {
     private static $instance = null;
     private $registry;
     private $fb;
