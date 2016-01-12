@@ -24,6 +24,6 @@ if(file_exists($conf_file))
 }
 
 $registry->db = DB::getInstance($registry);
-#$registry->myFunctions = myFunctions::getInstance($registry);
+$registry->myFunctions = myFunctions::getInstance($registry);
 $registry->fb = FB::getInstance($registry);
 ?>
