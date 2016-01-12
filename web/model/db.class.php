@@ -103,6 +103,18 @@ class DB {
         }else return 'error1: '.$this->getLastError();
 
     }
+    
+    public function toggleQuizzEnabled($idQuizz){
+        $query = $this->connexion->prepare('SELECT enabled FROM quizz WHERE id=?');
+        $toEnabled = $this->connexion->prepare('UPDATE quizz SET enabled=1 WHERE id=?');
+        $toDisabled = $this->connexion->prepare('UPDATE quizz SET enabled=0 WHERE id=?');
+        if($query->execute(array($idQuizz))){
+            $query = $query->fetch(PDO::FETCH_ASSOC);
+            if($query['enabled']){
+                return $toDisabled->execute(array($idQuizz));
+            }else return $toEnabled->execute(array($idQuizz));
+        }else return false;
+    }
 
 
 }
