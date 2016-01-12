@@ -1,5 +1,5 @@
 <?php
-class myFunctions {
+class MYFUNCTIONS {
     private static $instance = null;
     private $registry;
 
