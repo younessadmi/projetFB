@@ -25,9 +25,9 @@
         </script>
     </head>
     <body>
+       <?php if($this->registry->is_admin){?>
         <header>
             <nav class="navbar navbar-default navbar-static-top">
-
                 <div class="container-fluid">
                     <!--BRAND MARK HEADER -->
                     <div class="navbar-header">
@@ -37,7 +37,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">INVESTIGATOR</a>
+                        <a class="navbar-brand" href="<?php echo BASE_URL;?>">INVESTIGATOR</a>
                     </div>
                     <!-- ########################### -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -50,6 +50,7 @@
                 </div>
             </nav>
         </header>
+        <?php } ?>
         <div style="margin:5px; padding:5px;">
         <?php if(isset($error)) $this->registry->myFunctions->printMessage($error, 'danger');?>
         <?php if(isset($message)) $this->registry->myFunctions->printMessage($message, 'info');?>
