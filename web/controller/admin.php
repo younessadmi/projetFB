@@ -4,18 +4,17 @@ class adminController{
     private $registry;
 
     public function __construct($registry){
-        if(!$registry->is_admin){
-            $registry->template->show('not_found');
-            die();   
-        }
         $this->registry = $registry;
     }
 
     public function index() {
-        $this->registry->template->show('admin/admin');
+        $this->registry->template->show('admin');
     }
 
     public function addQuizz(){
+        //        echo '<pre>', print_r($_POST, true), '</pre>';
+
+
         //si on valide l'étape 1
         $toPostStep1 = ['quizz-name', 'quizz-start-datetime', 'quizz-end-datetime', 'quizz-nbQuestions', 'submit'];
         if(isset($_POST['submit'])){ // si le formulaire a été soumis
