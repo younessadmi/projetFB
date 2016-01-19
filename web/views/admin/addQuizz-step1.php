@@ -49,7 +49,6 @@
                     <label for="nbQuestions">Nombre de questions</label>
                     <input type="number" class="form-control" min="1" max="15" value="10" name="quizz-nbQuestions" id="nbQuestions" required>
                 </div>
-
             </div>
             <div class="col-md-1">
                 <br>
