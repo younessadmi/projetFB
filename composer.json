@@ -2,7 +2,6 @@
     "require" : {
         "silex/silex": "~1.3",
         "monolog/monolog": "~1.7",
-        "ext-mbstring": "*",
         "twig/twig": "^1.19",
         "symfony/twig-bridge": "^2.7"
     },
