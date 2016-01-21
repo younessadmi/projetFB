@@ -44,10 +44,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-1">
                 <div class="form-group">
-                    <label for="nbQuestions">Nombre de questions</label>
-                    <input type="number" class="form-control" min="1" max="15" value="10" name="quizz-nbQuestions" id="nbQuestions" required>
+                    <label for="nbQuestions">Nombre de questions total</label>
+                    <input type="number" class="form-control" min="1" max="30" value="10" name="quizz-nbQuestions" id="nbQuestions" required>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="form-group">
+                    <label for="nbQuestionsDisplayed">Nombre de questions à afficher</label>
+                    <input type="number" class="form-control" min="1" max="10" name="quizz-nbQuestionsDisplayed" id="nbQuestionsDisplayed" required>
                 </div>
             </div>
             <div class="col-md-1">
@@ -83,6 +89,10 @@
             $(this).css('border', '1px solid #CCC');
         });
 
+        $('#nbQuestions').change(function(){
+            $('#nbQuestionsDisplayed').attr('max', $('#nbQuestions').val());
+        });
+        
         //vérification JS du formulaire
         $('form').submit(function(){
             //check si le nom du quizz n'est pas vide

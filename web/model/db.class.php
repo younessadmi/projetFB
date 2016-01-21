@@ -36,16 +36,16 @@ class DB {
         }
     }
 
-    public function addQuizz($quizzName, $startDate, $endDate, $nbQuestions){
+    public function addQuizz($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed){
         if($query = $this->connexion->prepare('SELECT COUNT(*) AS nb FROM quizz WHERE name=?')){
             if($query->execute(array($quizzName))){
                 if($query = $query->fetch()){
                     if($query['nb'] == 0){
                         $query2 = $this->connexion->prepare('
-                            INSERT INTO quizz (name, date_start, date_end, questions_nb)
-                            VALUES(?, ?, ?, ?);
+                            INSERT INTO quizz (name, date_start, date_end, questions_nb_total, questions_nb_displayed)
+                            VALUES(?, ?, ?, ?, ?);
                         ');
-                        if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestions))){
+                        if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed))){
                             return true;
                         }else return 'Insertion has been not successful';
                     }else return 'The quizz name already exists';
