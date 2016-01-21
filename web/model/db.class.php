@@ -103,7 +103,7 @@ class DB {
         }else return 'error1: '.$this->getLastError();
 
     }
-    
+
     public function toggleQuizzEnabled($idQuizz){
         $query = $this->connexion->prepare('SELECT enabled FROM quizz WHERE id=?');
         $toEnabled = $this->connexion->prepare('UPDATE quizz SET enabled=1 WHERE id=?');
@@ -116,5 +116,25 @@ class DB {
         }else return false;
     }
 
-
+    public function getQuizz($idQuizz = 'ALL'){
+        $sql = 'SELECT * FROM quizz '.(($idQuizz == 'ALL')? ' ' : 'WHERE id = ?');
+        $sql.= ' ORDER BY date_end DESC';
+        $query = $this->connexion->prepare($sql);
+        if($idQuizz == 'ALL'){
+            if($query->execute()){
+                $quizzs = [];
+                while($quizz = $query->fetch(PDO::FETCH_ASSOC)){
+                    $quizzs[$quizz['id']] = $quizz;
+                }
+            }else return $this->getLastError();
+        }else{
+            if($query->execute(array($idQuizz))){
+                $quizzs = [];
+                while($quizz = $query->fetch(PDO::FETCH_ASSOC)){
+                    $quizzs[$quizz['id']] = $quizz;
+                }
+            }else return $this->getLastError();
+        }
+        return $quizzs;
+    }
 }

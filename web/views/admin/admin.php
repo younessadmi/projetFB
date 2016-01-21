@@ -14,11 +14,12 @@
             </a>
         </div>
         <div class="col-md-4">
-            <div style="text-align: center;">
-                <i class="fa fa-pause" style="font-size: 80px;"></i>
-                <p>???????</p>
-            </div>
-
+            <a href="<?php echo BASE_URL;?>admin/listQuizz">
+                <div style="text-align: center;">
+                    <i class="fa fa-list" style="font-size: 80px;"></i>
+                    <p>Afficher les quizz</p>
+                </div>
+            </a>
         </div>
         <div class="col-md-4">
             <div style="text-align: center;">

@@ -87,5 +87,10 @@ class adminController{
 
         $this->registry->template->show('admin/addQuizz-step1');
     }
+    
+    public function listQuizz(){
+        $this->registry->template->quizz = $this->registry->db->getQuizz();
+        $this->registry->template->show('admin/listQuizz');
+    }
 }
 ?>
