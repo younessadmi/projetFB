@@ -10,7 +10,6 @@
                 <th>Nombre de questions affichées</th>
                 <th>Nombre de questions totales</th>
                 <th>Editer</th>
-                <th>Supprimer</th>
             </tr>
         </thead>
         <tbody>
@@ -25,8 +24,7 @@ foreach($quizz as $q){
                 <td>'.$q['date_end'].'</td>
                 <td>'.$q['questions_nb_displayed'].'</td>
                 <td>'.$q['questions_nb_total'].'</td>
-                <td><i class="fa fa-pencil-square-o"></i></td>
-                <td><i class="fa fa-trash"></i></td>
+                <td><a href="'.BASE_URL.'admin/editQuizz/'.$q['id'].'"><i class="fa fa-pencil-square-o"></i></a></td>
             </tr>
        ';
 }
@@ -36,7 +34,7 @@ foreach($quizz as $q){
 </div>
 <style>
     tr * {
-        text-align:center;   
+        text-align:center;
     }
 </style>
 

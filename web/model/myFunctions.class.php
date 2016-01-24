@@ -29,7 +29,7 @@ class myFunctions {
 
     public function printMessage($message, $level = 'info'){
         echo '
-            <div class="alert alert-'.$level.' alert-dismissible fade in" role="alert">
+            <div class="alert alert-'.$level.' alert-dismissible fade in" role="alert" onclick="$(this).slideUp(\'fast\')" style="cursor:pointer">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </button>

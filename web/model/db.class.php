@@ -37,17 +37,72 @@ class DB {
     }
 
     public function addQuizz($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed){
+        $res = $this->checkQuizzNameExists($quizzName);
+        if($res === false){
+            $query2 = $this->connexion->prepare('
+                INSERT INTO quizz (name, date_start, date_end, questions_nb_total, questions_nb_displayed)
+                VALUES(?, ?, ?, ?, ?);
+            ');
+            if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed))){
+                return true;
+            }else return 'Insertion has been not successful ['.$this->getLastError().']';
+        }else return $res;
+    }
+
+    public function updateQuizz($id, $name, $date_start, $date_end, $enabled, $questions_nb_displayed, $questions_nb_total){
+        $sql = 'UPDATE quizz SET ';
+        if($name !== null){
+            $sql .= 'name = :name';
+        }
+        if($date_start !== null){
+            $sql .= ', date_start = :date_start';
+        }
+        if($date_end !== null){
+            $sql .= ', date_end = :date_end';
+        }
+        if($enabled !== null){
+            $sql .= ', enabled = :enabled';
+        }
+        if($questions_nb_displayed !== null){
+            $sql .= ', questions_nb_displayed = :questions_nb_displayed';
+        }
+        if($questions_nb_total !== null){
+            $sql .= ', questions_nb_total = :questions_nb_total';
+        }
+        $sql .= ' WHERE id = :id';
+        $query = $this->connexion->prepare($sql);
+        $query->bindValue(':id', $id);
+        if($name !== null){
+            $query->bindValue(':name', $name);
+        }
+        if($date_start !== null){
+            $query->bindValue(':date_start', $date_start);
+        }
+        if($date_end !== null){
+            $query->bindValue(':date_end', $date_end);
+        }
+        if($enabled !== null){
+            $query->bindValue(':enabled', $enabled);
+        }
+        if($questions_nb_displayed !== null){
+            $query->bindValue(':questions_nb_displayed', $questions_nb_displayed);
+        }
+        if($questions_nb_total !== null){
+            $query->bindValue(':questions_nb_total', $questions_nb_total);
+        }
+        
+        if($query->execute()){
+            return true;
+        }else return $this->getLastError();
+        return true;
+    }
+
+    public function checkQuizzNameExists($n){
         if($query = $this->connexion->prepare('SELECT COUNT(*) AS nb FROM quizz WHERE name=?')){
-            if($query->execute(array($quizzName))){
+            if($query->execute(array($n))){
                 if($query = $query->fetch()){
                     if($query['nb'] == 0){
-                        $query2 = $this->connexion->prepare('
-                            INSERT INTO quizz (name, date_start, date_end, questions_nb_total, questions_nb_displayed)
-                            VALUES(?, ?, ?, ?, ?);
-                        ');
-                        if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed))){
-                            return true;
-                        }else return 'Insertion has been not successful';
+                        return false;
                     }else return 'The quizz name already exists';
                 }else return 'Fetch failed';
             }else return 'Execute for existing quizz has failed';
@@ -118,7 +173,7 @@ class DB {
 
     public function getQuizz($idQuizz = 'ALL'){
         $sql = 'SELECT * FROM quizz '.(($idQuizz == 'ALL')? ' ' : 'WHERE id = ?');
-        $sql.= ' ORDER BY date_end DESC';
+        $sql.= ' ORDER BY enabled DESC, date_end DESC';
         $query = $this->connexion->prepare($sql);
         if($idQuizz == 'ALL'){
             if($query->execute()){
