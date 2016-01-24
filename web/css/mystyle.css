@@ -6,3 +6,21 @@
     margin-left: 2px;
     margin-right: 2px;
 }
+
+.tablesorter th.tablesorter-headerAsc { 
+    background-image: url(../img/tablesorter/small_asc.gif); 
+}
+
+.tablesorter th.tablesorter-headerDesc { 
+    background-image: url(../img/tablesorter/small_desc.gif); 
+}
+
+.tablesorter th.tablesorter-headerUnSorted { 
+    background-image: url(../img/tablesorter/small.gif);
+} 
+
+.tablesorter th.tablesorter-header { 
+    cursor: pointer;
+    background-repeat: no-repeat; 
+    background-position: center left; 
+}

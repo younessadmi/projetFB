@@ -17,6 +17,8 @@
         <script src="<?php echo BASE_URL;?>js/bootstrap-datetimepicker.min.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+        
+        <script src="<?php echo BASE_URL;?>js/jquery.tablesorter.min.js"></script>
 
         <link href="<?php echo BASE_URL;?>css/mystyle.css" rel="stylesheet" type="text/css">
         <script src="<?php echo BASE_URL;?>js/functions.js"></script>
