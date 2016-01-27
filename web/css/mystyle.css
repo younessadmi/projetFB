@@ -1,3 +1,7 @@
+/*
+    primary color: #b757ff
+*/
+
 .navbar-nav li.divider{
     margin-top:15px;
     width:1px;
@@ -23,4 +27,16 @@
     cursor: pointer;
     background-repeat: no-repeat; 
     background-position: center left; 
+}
+
+/*overwrite NProgress*/
+#nprogress .bar {
+  background: #b757ff;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px #b757ff, 0 0 5px #b757ff;
+}
+#nprogress .spinner-icon {
+  border-top-color: #b757ff;
+  border-left-color: #b757ff;
 }
