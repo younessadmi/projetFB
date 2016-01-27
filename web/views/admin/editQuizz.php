@@ -75,19 +75,19 @@
                 <div class="panel-heading" role="tab" id="heading_<?php echo $id_question;?>">
                     <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_<?php echo $id_question;?>" aria-expanded="true" aria-controls="collapse_<?php echo $id_question;?>">
-                            <p><?php echo $question['question'];?></p>                            
+                            <p id="question_<?php echo $id_question;?>"><?php echo htmlentities($question['question']);?></p>                            
                         </a>
                     </h4>
                 </div>
                 <div id="collapse_<?php echo $id_question;?>" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading_<?php echo $id_question;?>">
                     <div class="panel-body row" data-id-question="<?php echo $id_question;?>">
                         <div class="col-md-12">
-                            <input data-id-question="<?php echo $id_question;?>" class="form-control" value="<?php echo $question['question'];?>" placeholder="Question...">
+                            <input data-id-question="<?php echo $id_question;?>" class="form-control" value="<?php echo htmlentities($question['question']);?>" placeholder="Question...">
                         </div>
                         <br><br>
                         <?php foreach($question['propositions'] as $id_proposition => $proposition){?>
                         <div class="col-md-3">
-                            <input data-id-proposition="<?php echo $id_proposition;?>" class="form-control" style="border:solid 1px<?php echo (($proposition['is_correct'])? '#33d31e' : '#d3331e');?>" value="<?php echo $proposition['proposition'];?>">
+                            <input data-id-proposition="<?php echo $id_proposition;?>" class="form-control" style="border:solid 1px<?php echo (($proposition['is_correct'])? '#33d31e' : '#d3331e');?>" value="<?php echo htmlentities($proposition['proposition']);?>">
                         </div>
                         <?php }?>
                         <br><br>
@@ -108,38 +108,16 @@
         $("button.btn-update").click(function(){
             var idQuestion = new Object();
             var idPropositions = new Object();
-            
-            
+
             $("div[data-id-question='"+$(this).attr("data-id-question")+"'] input[data-id-proposition]").each(function(){
                 idPropositions[ $(this).attr('data-id-proposition') ] = $(this).val();
             });
+            
             idQuestion[$(this).attr("data-id-question")] = $("div[data-id-question='"+$(this).attr("data-id-question")+"'] input[data-id-question]").val();
-            updateQuestion(idQuestion, idPropositions);
+            updateQuestion(idQuestion, idPropositions, $(this).attr("data-id-question"));
 
             return false;
         });
-
-        function updateQuestion(idQuestion, idPropositions){
-            console.info('Start ajax');
-            $.ajax({
-                url: base_url+'ajax/updateQuestion',
-                method: 'POST',
-                data: { idQuestion: idQuestion, idPropositions: idPropositions },
-                dataType: 'JSON'
-            }).done(function(data, textStatus, jqXHR){
-                console.log(data);
-                console.info('End ajax');
-            }).fail(function(jqXHR, textStatus, errorThrown){
-                console.error("{"+jqXHR.responseText+"}");
-                console.error(textStatus);
-                console.error(errorThrown);
-            });
-//            console.log(idQuestion);
-//            console.log(idPropositions);
-        }
-
-
-
     });
 </script>
 <style>

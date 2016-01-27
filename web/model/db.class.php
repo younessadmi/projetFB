@@ -205,7 +205,9 @@ class DB {
             JOIN answer a ON a.id_question = q.id
             JOIN proposition p ON p.id = a.id_proposition
             JOIN quizz qz ON qz.id = q.id_quizz
-            WHERE id_quizz = ?;
+            WHERE id_quizz = ?
+            ORDER BY id_question
+            ;
         ';
 
         $query = $this->connexion->prepare($sql);
