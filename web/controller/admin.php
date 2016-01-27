@@ -87,5 +87,41 @@ class adminController{
 
         $this->registry->template->show('admin/addQuizz-step1');
     }
+
+    public function listQuizz(){
+        $this->registry->template->quizz = $this->registry->db->getInfoQuizz();
+        $this->registry->template->show('admin/listQuizz');
+    }
+
+    public function editQuizz($args){
+        //si on édite le quizz
+        if(isset($_POST['submit']) && $_POST['submit'] == 'update'){
+            $post_expected = ['enabled', 'idquizz', 'name', 'original-name', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
+            $post_expected2 = ['idquizz', 'name', 'original-name', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
+            if($post_expected == array_keys($_POST) || $post_expected2 == array_keys($_POST)){
+                if(is_numeric($_POST['idquizz'])){
+                    if(strlen(trim($_POST['name'])) > 0){
+                        if(is_numeric($_POST['questions_nb_displayed'])){
+                            if($_POST['original-name'] == $_POST['name'] || $this->registry->db->checkQuizzNameExists($_POST['name']) === false){
+                                $res = $this->registry->db->updateQuizz($_POST['idquizz'], $_POST['name'], null, null, ((isset($_POST['enabled']))? 1 : 0), $_POST['questions_nb_displayed'], null);
+                                if($res === true){
+                                    $this->registry->template->success = 'Le quizz a bien été mis à jour';
+                                }else $this->registry->template->error = $res;
+                            }else $this->registry->template->error = 'Nom de quizz déjà existant';
+                        }else $this->registry->template->error = '';
+                    }else $this->registry->template->error = 'Nom invalide';
+                }else $this->registry->template->error = 'Erreur d\'identifiant';
+            }else $this->registry->template->error = 'Erreur de formulaire';
+        }
+
+        //affichage par défaut
+        if(isset($args[0]) && is_numeric($args[0])){
+            if(!empty($quizz = $this->registry->db->getQuestionsByIdQuizz($args[0]))){
+                $this->registry->template->quizz = $quizz;
+                $this->registry->template->show('admin/editQuizz');
+            }else $this->registry->template->show('not_found');
+        }else $this->registry->template->show('not_found');
+    }
+
 }
 ?>
