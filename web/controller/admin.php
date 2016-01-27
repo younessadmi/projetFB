@@ -89,13 +89,13 @@ class adminController{
     }
 
     public function listQuizz(){
-        $this->registry->template->quizz = $this->registry->db->getQuizz();
+        $this->registry->template->quizz = $this->registry->db->getInfoQuizz();
         $this->registry->template->show('admin/listQuizz');
     }
 
     public function editQuizz($args){
         //si on édite le quizz
-        if(isset($_POST['submit'])){
+        if(isset($_POST['submit']) && $_POST['submit'] == 'update'){
             $post_expected = ['enabled', 'idquizz', 'name', 'original-name', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
             $post_expected2 = ['idquizz', 'name', 'original-name', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
             if($post_expected == array_keys($_POST) || $post_expected2 == array_keys($_POST)){
@@ -116,16 +116,12 @@ class adminController{
 
         //affichage par défaut
         if(isset($args[0]) && is_numeric($args[0])){
-            if(!empty($quizz = $this->registry->db->getQuizz($args[0]))){
-                $quizz = $quizz[$args[0]];
-                $quizz['date_start'] = DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_start'])->format('d/m/Y H:i');
-                $quizz['date_end'] = DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_end'])->format('d/m/Y H:i');
+            if(!empty($quizz = $this->registry->db->getQuestionsByIdQuizz($args[0]))){
                 $this->registry->template->quizz = $quizz;
                 $this->registry->template->show('admin/editQuizz');
             }else $this->registry->template->show('not_found');
         }else $this->registry->template->show('not_found');
     }
-
 
 }
 ?>

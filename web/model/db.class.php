@@ -90,7 +90,7 @@ class DB {
         if($questions_nb_total !== null){
             $query->bindValue(':questions_nb_total', $questions_nb_total);
         }
-        
+
         if($query->execute()){
             return true;
         }else return $this->getLastError();
@@ -171,7 +171,7 @@ class DB {
         }else return false;
     }
 
-    public function getQuizz($idQuizz = 'ALL'){
+    public function getInfoQuizz($idQuizz = 'ALL'){
         $sql = 'SELECT * FROM quizz '.(($idQuizz == 'ALL')? ' ' : 'WHERE id = ?');
         $sql.= ' ORDER BY enabled DESC, date_end DESC';
         $query = $this->connexion->prepare($sql);
@@ -191,5 +191,58 @@ class DB {
             }else return $this->getLastError();
         }
         return $quizzs;
+    }
+
+    public function getQuestionsByIdQuizz($idQuizz){
+        $sql = '
+            SELECT 
+                q.label AS "question", q.id AS "id_question", q.id_quizz,
+                a.is_correct, a.id_proposition,
+                p.label AS "proposition",
+                qz.name AS "quizz_name", qz.date_start, qz.date_end, qz.enabled, qz.questions_nb_displayed, qz.questions_nb_total
+            FROM 
+                question q
+            JOIN answer a ON a.id_question = q.id
+            JOIN proposition p ON p.id = a.id_proposition
+            JOIN quizz qz ON qz.id = q.id_quizz
+            WHERE id_quizz = ?;
+        ';
+
+        $query = $this->connexion->prepare($sql);
+        if($query->execute(array($idQuizz))){
+            $tab = ['id_quizz' => false];
+            while($r = $query->fetch(PDO::FETCH_ASSOC)){
+                if($tab['id_quizz'] === false){
+                    $tab['id_quizz'] = $r['id_quizz'];
+                    $tab['quizz_name'] = $r['quizz_name'];
+                    $tab['date_start'] = DateTime::createFromFormat('Y-m-d H:i:s', $r['date_start'])->format('d/m/Y H:i');
+                    $tab['date_end'] = DateTime::createFromFormat('Y-m-d H:i:s', $r['date_end'])->format('d/m/Y H:i');
+                    $tab['enabled'] = $r['enabled'];
+                    $tab['questions_nb_displayed'] = $r['questions_nb_displayed'];
+                    $tab['questions_nb_total'] = $r['questions_nb_total'];
+                }
+                $tab['questions'][$r['id_question']]['question'] = $r['question'];
+                $tab['questions'][$r['id_question']]['propositions'][$r['id_proposition']]['proposition'] = $r['proposition'];
+                $tab['questions'][$r['id_question']]['propositions'][$r['id_proposition']]['is_correct'] = $r['is_correct'];
+            }
+            return $tab;
+        }else return 'Erreur lors de la requête SQL ';
+
+
+
+
+    }
+
+    public function updateLabel($id, $label, $type){
+        if($type == 'question'){
+            $sql = 'UPDATE question SET label = ? WHERE id = ?';
+        }elseif($type == 'proposition'){
+            $sql = 'UPDATE proposition SET label = ? WHERE id = ?';
+        }else return 'Type not defined';
+        
+        $query = $this->connexion->prepare($sql);
+        if($query->execute(array($label, $id))){
+            return true;
+        }else return 'Error lors de l execute.. label:'.$label.', id:'.$id.'.';
     }
 }

@@ -1,3 +1,4 @@
+<?php if(count($quizz) > 0){?>
 <div class="table-responsive">
     <table class="table table-bordered tablesorter">
         <thead>
@@ -14,8 +15,8 @@
         </thead>
         <tbody>
             <?php
-foreach($quizz as $q){
-    echo '
+    foreach($quizz as $q){
+        echo '
             <tr '.((!$q['enabled'])? 'class=warning' : '' ).'>
                 <td>'.(($q['enabled'])? 'Activé' : 'Désactivé' ).'</td>
                 <td>'.$q['id'].'</td>
@@ -27,11 +28,14 @@ foreach($quizz as $q){
                 <td><a href="'.BASE_URL.'admin/editQuizz/'.$q['id'].'"><i class="fa fa-pencil-square-o"></i></a></td>
             </tr>
        ';
-}
+    }
             ?>
         </tbody>
     </table>
 </div>
+<?php }else{?>
+<h3 style="text-align:center">Aucun quizz trouvé ! Créer un nouveau <a href="<?php echo BASE_URL;?>admin/addQuizz">ici</a></h3>
+<?php }?>
 <style>
     tr * {
         text-align:center;
