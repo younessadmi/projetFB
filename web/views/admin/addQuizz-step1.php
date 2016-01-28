@@ -23,7 +23,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="quizz-name">Nom du quizz</label>
-                    <input type="text" class="form-control" id="quizz-name" name="quizz-name" placeholder="Nom" required>
+                    <input type="text" class="form-control" id="quizz-name" name="quizz-name" placeholder="Nom" required autocomplete="off">
                 </div>
             </div>
             <div class="col-md-3">
