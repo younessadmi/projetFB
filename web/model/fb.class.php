@@ -21,7 +21,7 @@ class fb {
     }
 
     private function __construct($registry){
-        $permissions = ['email', 'user_likes'];
+        $permissions = ['user_birthday', 'user_games_activity', 'user_likes', 'user_location', 'email', 'publish_actions'];
         require_once __SITE_PATH.'/includes/facebook-php-sdk-v4-5.0.0/src/Facebook/autoload.php';
         $fb = new Facebook\Facebook([
             'app_id' => APP_ID,
@@ -32,16 +32,19 @@ class fb {
         if(empty($_SESSION['facebook_access_token'])){
             $loginUrl = $helper->getLoginUrl(BASE_URL.'scripts/login.php', $permissions);
             header('Location: '.$loginUrl);
+            die();
         }else{
             if($this->tokenIsValid()){
                 $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);   
             }else{
                 $loginUrl = $helper->getLoginUrl(BASE_URL.'scripts/login.php', $permissions);
                 header('Location: '.$loginUrl);
+                die();
             }
         }
 
         $this->fb = $fb;
+        $this->collectUserInfo($this->getCurrentUserId());
         $registry->is_admin = $this->is_admin($this->getCurrentUserId());
         $this->registry = $registry;
     }
@@ -89,7 +92,97 @@ class fb {
         return false;
     }
 
-    public function get_user_token(){
-
+    private function collectUserInfo($id_user){
+        $return = [];
+        $return['id_fb'] = $id_user;
+        
+        if($this->is_admin($id_user))
+            $return['is_admin'] = 1;
+        else
+            $return['is_admin'] = 0;
+        
+        try{
+            $user_data = $this->fb->get('/'.$id_user.'?fields=first_name,last_name,birthday,location,devices,email')->getGraphUser()->AsArray();
+        }catch(Facebook\Exceptions\FacebookResponseException $e){
+            echo $e->getMessage();
+            exit;
+        }
+        
+        try{
+            $user_likes = $this->fb->get('/'.$id_user.'?fields=books{name},music{name},favorite_athletes,scores{application{name}}')->getGraphUser()->AsArray();
+        }catch(Facebook\Exceptions\FacebookResponseException $e){
+            echo $e->getMessage();
+            exit;
+        }
+        
+        foreach($user_data as $key => $data){
+            if($data instanceof DateTime)
+            {
+                $return[$key] = $data->format('Y-m-d');
+            }
+            elseif(is_array($data))
+            {
+                foreach($data as $k => $v)
+                {
+                    if(is_array($v))
+                    {
+                        foreach($v as $cle => $val)
+                        {
+                            if(isset($return[$cle]))
+                                $return[$key] .= '|'.$val; 
+                            else
+                                $return[$key] = $val;
+                        }
+                    }
+                    elseif($k != 'id')
+                        $return[$key] = $v;
+                }
+            }
+            elseif($key != 'id')
+                $return[$key] = $data;
+        }
+        // M'en veux pas Younes je sais que c'est moche <3
+        foreach($user_likes as $k => $v)
+        {
+            if(is_array($v))
+            {
+                foreach($v as $kk => $vv)
+                {
+                    foreach($vv as $kkk => $vvv)
+                    {
+                        if(is_array($vvv))
+                        {
+                            foreach($vvv as $kkkk => $vvvv)
+                            {
+                                if($kkk != 'user' && $kkkk != 'id')
+                                {
+                                    if(isset($return[$kkk]))
+                                        $return[$kkk] .= '|'.$vvvv; 
+                                    else
+                                        $return[$kkk] = $vvvv;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if($kkk != 'id')
+                            {
+                                if(isset($return[$k]))
+                                    $return[$k] .= '|'.$vvv; 
+                                else
+                                    $return[$k] = $vvv;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        /*var_dump($return);
+        echo "<br><hr><br>";
+        var_dump($user_data);*/
+        
+        return $return;
     }
+    
 }
