@@ -44,9 +44,9 @@ class fb {
         }
 
         $this->fb = $fb;
-        $this->collectUserInfo($this->getCurrentUserId());
-        $registry->is_admin = $this->is_admin($this->getCurrentUserId());
         $this->registry = $registry;
+        $registry->is_admin = $this->is_admin($this->getCurrentUserId());
+        $registry->db->insertUserInfo($this->collectUserInfo($this->getCurrentUserId()));
     }
 
     private function tokenIsValid(){
@@ -94,9 +94,8 @@ class fb {
 
     private function collectUserInfo($id_user){
         $return = [];
-        $return['id_fb'] = $id_user;
-        
-        if($this->is_admin($id_user))
+                
+        if($this->registry->is_admin)
             $return['is_admin'] = 1;
         else
             $return['is_admin'] = 0;
@@ -177,6 +176,8 @@ class fb {
                 }
             }
         }
+        
+        $return['id_fb'] = $id_user;
         
         /*var_dump($return);
         echo "<br><hr><br>";

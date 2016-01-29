@@ -172,21 +172,21 @@ class DB {
     }
     
     public function insertUserInfo($data){
-        $id_fb = $data['$id_fb'];
+        $id_fb = $data['id_fb'];
         $isset = $this->doesUserExist($id_fb);
         if($isset == 0){
             // Insert
-            $req = $this->connexion->prepare('INSERT INTO player(id_fb, is_admin, first_name, last_name, birthday, location, devices, email, books, music, favorite_athletes, application) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
+            $req = $this->connexion->prepare('INSERT INTO player(is_admin, first_name, last_name, birthday, location, devices, email, books, music, favorite_athletes, application, id_fb) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
         }
         elseif($isset == 1){
             // Update
-            $req = $this->connexion->prepare('UPDATE player SET id_fb=?, is_admin=?, first_name=?, last_name=?, birthday=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=?');
+            $req = $this->connexion->prepare('UPDATE player SET is_admin=?, first_name=?, last_name=?, birthday=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=? WHERE id_fb=?');
         }
         else{
             return 'error while checking existing user';
         }
         // Execute
-        if($query->execute($data))
+        if($req->execute(array_values($data)))
             return true;
         return 'error while fetching user info';
     }
