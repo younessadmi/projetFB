@@ -176,11 +176,11 @@ class DB {
         $isset = $this->doesUserExist($id_fb);
         if($isset == 0){
             // Insert
-            $req = $this->connexion->prepare('INSERT INTO player(is_admin, first_name, last_name, birthday, location, devices, email, books, music, favorite_athletes, application, id_fb) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
+            $req = $this->connexion->prepare('INSERT INTO player(is_admin, first_name, last_name, birthday, gender, location, devices, email, books, music, favorite_athletes, application, id_fb) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
         }
         elseif($isset == 1){
             // Update
-            $req = $this->connexion->prepare('UPDATE player SET is_admin=?, first_name=?, last_name=?, birthday=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=? WHERE id_fb=?');
+            $req = $this->connexion->prepare('UPDATE player SET is_admin=?, first_name=?, last_name=?, birthday=?, gender=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=? WHERE id_fb=?');
         }
         else{
             return 'error while checking existing user';
@@ -272,4 +272,61 @@ class DB {
             return true;
         }else return 'Error lors de l execute.. label:'.$label.', id:'.$id.'.';
     }
+    
+    public function getListPlayer(){
+        $req = $this->connexion->prepare("SELECT * FROM player ORDER BY id");
+        if($req->execute())
+        {
+            $likes = ['books','music','favorite_athletes','application','devices'];
+            $players = [];
+            while($res = $req->fetch(PDO::FETCH_ASSOC)){
+                foreach($res as $k => $v)
+                {
+                    if(in_array($k,$likes))
+                    {
+                        $v = str_replace('|',', ',$v);
+                        $res[$k] = $v;
+                    }
+                    elseif($k == 'birthday'){
+                        $v = $this->getBdayFromDate($v);
+                        $res[$k] = $v;
+                    }
+                    elseif($k == 'gender'){
+                        $v = strtoupper(substr($v,0,1));
+                        $res[$k] = $v;
+                    }
+                }
+                $players[$res['id']] = $res;
+            }
+        }else return "error while getting users list";
+        
+        return $players;
+    }
+    
+    public function getBdayFromDate($birthDate){
+        $birthDate = explode("-", $birthDate);
+        $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[1], $birthDate[2], $birthDate[0]))) > date("md")
+            ? ((date("Y") - $birthDate[0]) - 1)
+            : (date("Y") - $birthDate[0]));
+
+        return $age;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

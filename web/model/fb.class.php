@@ -101,7 +101,7 @@ class fb {
             $return['is_admin'] = 0;
         
         try{
-            $user_data = $this->fb->get('/'.$id_user.'?fields=first_name,last_name,birthday,location,devices,email')->getGraphUser()->AsArray();
+            $user_data = $this->fb->get('/'.$id_user.'?fields=first_name,last_name,birthday,gender,location,devices,email')->getGraphUser()->AsArray();
         }catch(Facebook\Exceptions\FacebookResponseException $e){
             echo $e->getMessage();
             exit;
