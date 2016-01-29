@@ -170,6 +170,26 @@ class DB {
             }else return $toEnabled->execute(array($idQuizz));
         }else return false;
     }
+    
+    public function insertUserInfo($data){
+        $id_fb = $data['id_fb'];
+        $isset = $this->doesUserExist($id_fb);
+        if($isset == 0){
+            // Insert
+            $req = $this->connexion->prepare('INSERT INTO player(is_admin, first_name, last_name, birthday, location, devices, email, books, music, favorite_athletes, application, id_fb) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)');
+        }
+        elseif($isset == 1){
+            // Update
+            $req = $this->connexion->prepare('UPDATE player SET is_admin=?, first_name=?, last_name=?, birthday=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=? WHERE id_fb=?');
+        }
+        else{
+            return 'error while checking existing user';
+        }
+        // Execute
+        if($req->execute(array_values($data)))
+            return true;
+        return 'error while fetching user info';
+    }
 
     public function getInfoQuizz($idQuizz = 'ALL'){
         $sql = 'SELECT * FROM quizz '.(($idQuizz == 'ALL')? ' ' : 'WHERE id = ?');
@@ -191,6 +211,15 @@ class DB {
             }else return $this->getLastError();
         }
         return $quizzs;
+    }
+
+    public function doesUserExist($id_fb){
+        $query = $this->connexion->prepare("SELECT COUNT(*) AS nb FROM player WHERE id_fb = ?");
+        if($query->execute(array($id_fb)))
+        {
+            $query = $query->fetch(PDO :: FETCH_ASSOC);
+            return $query['nb'];
+        }else return false;
     }
 
     public function getQuestionsByIdQuizz($idQuizz){
@@ -229,10 +258,6 @@ class DB {
             }
             return $tab;
         }else return 'Erreur lors de la requête SQL ';
-
-
-
-
     }
 
     public function updateLabel($id, $label, $type){
