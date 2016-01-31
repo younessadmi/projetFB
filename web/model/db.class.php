@@ -176,11 +176,11 @@ class DB {
         $isset = $this->doesUserExist($id_fb);
         if($isset == 0){
             // Insert
-            $req = $this->connexion->prepare('INSERT INTO player(is_admin, first_name, last_name, birthday, gender, location, devices, email, books, music, favorite_athletes, application, id_fb) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)');
+            $req = $this->connexion->prepare('INSERT INTO player(is_admin, first_name, last_name, birthday, gender, location, devices, email, books, music, favorite_athletes, application, last_update, id_fb) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
         }
         elseif($isset == 1){
             // Update
-            $req = $this->connexion->prepare('UPDATE player SET is_admin=?, first_name=?, last_name=?, birthday=?, gender=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=? WHERE id_fb=?');
+            $req = $this->connexion->prepare('UPDATE player SET is_admin=?, first_name=?, last_name=?, birthday=?, gender=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=?, last_update=? WHERE id_fb=?');
         }
         else{
             return 'error while checking existing user';

@@ -177,6 +177,7 @@ class fb {
             }
         }
         
+        $return['last_update'] = date('Y-m-d H:i:s');
         $return['id_fb'] = $id_user;
         
         /*var_dump($return);
