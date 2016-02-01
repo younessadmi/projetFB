@@ -30,7 +30,7 @@ class adminController{
                                         $startDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-start-datetime']);
                                         $endDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-end-datetime']);
                                         if($startDate->getTimestamp() < $endDate->getTimestamp()){ //si la date de début est avant la date de fin
-                                            $filename = date('Y-m-d_H-i-s').'__'.$_FILES['quizz-image']['name'];
+                                            $filename = htmlentities(substr(date('Y-m-d_H-i-s').'__'.$_FILES['quizz-image']['name'], 0, 100));
                                             if(($uploadImageQuizz = $this->registry->myFunctions->uploadImageQuizz($_FILES['quizz-image'], $filename)) === true){
                                                 if(($res = $this->registry->db->addQuizz($_POST['quizz-name'], $startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s'), $_POST['quizz-nbQuestions'], $_POST['quizz-nbQuestionsDisplayed'], $filename)) === true){
                                                     $this->registry->template->idQuizz = $this->registry->db->getIdQuizzByName($_POST['quizz-name']);
