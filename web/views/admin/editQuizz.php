@@ -1,3 +1,4 @@
+<?php var_dump($_POST); ?>
 <div>
     <div class="row">
         <div class="col-md-2">
@@ -24,6 +25,22 @@
                 <div class="col-md-10">
                     <input type="text" class="form-control" value="<?php echo $quizz['quizz_name'];?>" name="name" required>
                     <input type="hidden" value="<?php echo $quizz['quizz_name'];?>" name="original-name" hidden>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <p>DESCRIPTION</p>
+                </div>
+                <div class="col-md-10">
+                    <textarea class="form-control" name="description"><?php echo $quizz['description'];?></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <p>LOT</p>
+                </div>
+                <div class="col-md-10">
+                    <textarea class="form-control" name="lot" required><?php echo $quizz['lot'];?></textarea>
                 </div>
             </div>
             <div class="row">

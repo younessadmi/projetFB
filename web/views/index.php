@@ -5,11 +5,13 @@
         <div style="background:#b757ff;">
             <img src="<?php echo BASE_URL.'img'.DIRECTORY_SEPARATOR.'quizz-main-picture'.DIRECTORY_SEPARATOR.$quiz['img'];?>" alt="" style="display: block;margin-left: auto;margin-right: auto;padding-top:5px; height:100px">
             <hr class="style-eight">
-            <p style="text-align:center"><?php echo htmlentities($quiz['name']);?></p>
+            <p style="text-align:center;font-weight:bold" class="crop"><?php echo htmlentities($quiz['name']);?></p>
+            <p style="text-align:center;font-style:italic;" class="crop"><?php echo (!empty(trim($quiz['description']))) ? htmlentities($quiz['description']) : 'Aucune description';?></p>
+            <p style="text-align:center" class="crop"><i class="fa fa-trophy" style="font-size:20px"></i> <?php echo htmlentities($quiz['lot']);?></p>
         </div>
         <div class="row">
             <div class="col-md-8">
-                <a href="<?php echo BASE_URL;?>quizz/play/<?php echo $quiz['id'] ?>">
+                <a href="<?php echo BASE_URL;?>quizz/play/<?php echo $quiz['id'];?>">
                     <button type="button" class="btn btn-default" style="width:100%">Jouer <i class="fa fa-chevron-right"></i></button>
                 </a>
             </div>

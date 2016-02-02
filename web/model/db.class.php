@@ -36,20 +36,20 @@ class DB {
         }
     }
 
-    public function addQuizz($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed, $filename){
+    public function addQuizz($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed, $filename, $lot, $description){
         $res = $this->checkQuizzNameExists($quizzName);
         if($res === false){
             $query2 = $this->connexion->prepare('
-                INSERT INTO quizz (name, date_start, date_end, questions_nb_total, questions_nb_displayed, img)
-                VALUES(?, ?, ?, ?, ?, ?);
+                INSERT INTO quizz (name, date_start, date_end, questions_nb_total, questions_nb_displayed, img, lot, description)
+                VALUES(?, ?, ?, ?, ?, ?, ?, ?);
             ');
-            if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed, $filename))){
+            if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed, $filename, $lot, $description))){
                 return true;
             }else return 'Insertion has been not successful ['.$this->getLastError().']';
         }else return $res;
     }
 
-    public function updateQuizz($id, $name, $date_start, $date_end, $enabled, $questions_nb_displayed, $questions_nb_total){
+    public function updateQuizz($id, $name, $date_start, $date_end, $enabled, $questions_nb_displayed, $questions_nb_total, $description, $lot){
         $sql = 'UPDATE quizz SET ';
         if($name !== null){
             $sql .= 'name = :name';
@@ -68,6 +68,12 @@ class DB {
         }
         if($questions_nb_total !== null){
             $sql .= ', questions_nb_total = :questions_nb_total';
+        }
+        if($description !== null){
+            $sql .= ', description = :description';
+        }
+        if($lot !== null){
+            $sql .= ', lot = :lot';
         }
         $sql .= ' WHERE id = :id';
         $query = $this->connexion->prepare($sql);
@@ -89,6 +95,12 @@ class DB {
         }
         if($questions_nb_total !== null){
             $query->bindValue(':questions_nb_total', $questions_nb_total);
+        }
+        if($description !== null){
+            $query->bindValue(':description', $description);
+        }
+        if($lot !== null){
+            $query->bindValue(':lot', $lot);
         }
 
         if($query->execute()){
@@ -228,7 +240,7 @@ class DB {
                 q.label AS "question", q.id AS "id_question", q.id_quizz,
                 a.is_correct, a.id_proposition,
                 p.label AS "proposition",
-                qz.name AS "quizz_name", qz.date_start, qz.date_end, qz.enabled, qz.questions_nb_displayed, qz.questions_nb_total
+                qz.name AS "quizz_name", qz.date_start, qz.date_end, qz.enabled, qz.questions_nb_displayed, qz.questions_nb_total, qz.lot, qz.description
             FROM 
                 question q
             JOIN answer a ON a.id_question = q.id
@@ -251,6 +263,8 @@ class DB {
                     $tab['enabled'] = $r['enabled'];
                     $tab['questions_nb_displayed'] = $r['questions_nb_displayed'];
                     $tab['questions_nb_total'] = $r['questions_nb_total'];
+                    $tab['description'] = $r['description'];
+                    $tab['lot'] = $r['lot'];
                 }
                 $tab['questions'][$r['id_question']]['question'] = $r['question'];
                 $tab['questions'][$r['id_question']]['propositions'][$r['id_proposition']]['proposition'] = $r['proposition'];
