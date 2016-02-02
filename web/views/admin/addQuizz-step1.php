@@ -1,4 +1,3 @@
-
 <div>
     <div class="row">
         <div class="col-md-3"></div>
@@ -18,19 +17,31 @@
             <h4 style="text-align:center">Ajout d'un nouveau Quizz !</h4>
         </div>
     </div>
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label for="quizz-name">Nom du quizz</label>
-                    <input type="text" class="form-control" id="quizz-name" name="quizz-name" placeholder="Nom" required>
+                    <input type="text" class="form-control" id="quizz-name" name="quizz-name" placeholder="Nom" required autocomplete="off" value="<?php echo ((isset($_POST['quizz-name']))? $_POST['quizz-name']: '');?>">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="nbQuestions">Nombre de questions total</label>
+                    <input type="number" class="form-control" min="1" max="30" value="<?php echo ((isset($_POST['quizz-nbQuestions']))? $_POST['quizz-nbQuestions']: '10');?>" name="quizz-nbQuestions" id="nbQuestions" required>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="nbQuestionsDisplayed">Nombre de questions à afficher</label>
+                    <input type="number" class="form-control" min="1" max="10" value="<?php echo ((isset($_POST['quizz-nbQuestionsDisplayed']))? $_POST['quizz-nbQuestionsDisplayed']: '');?>" name="quizz-nbQuestionsDisplayed" id="nbQuestionsDisplayed" required>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="quizz-start-datetime">Date de début</label>
                     <div class="input-append date">
-                        <input size="16" type="text" value="" name="quizz-start-datetime" id="quizz-start-datetime" readonly class="form-control form_datetime" placeholder="Cliquer pour ouvrir le calendrier..." required>
+                        <input size="16" type="text" value="<?php echo ((isset($_POST['quizz-start-datetime']))? $_POST['quizz-start-datetime']: '');?>" name="quizz-start-datetime" id="quizz-start-datetime" readonly class="form-control form_datetime" placeholder="Cliquer pour ouvrir le calendrier..." required>
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                 </div>
@@ -39,21 +50,15 @@
                 <div class="form-group">
                     <label for="quizz-end-datetime">Date de fin</label>
                     <div class="input-append date">
-                        <input size="16" type="text" value="" name="quizz-end-datetime" id="quizz-end-datetime" readonly class="form-control form_datetime" placeholder="Cliquer pour ouvrir le calendrier..." required>
+                        <input size="16" type="text" value="<?php echo ((isset($_POST['quizz-end-datetime']))? $_POST['quizz-end-datetime']: '');?>" name="quizz-end-datetime" id="quizz-end-datetime" readonly class="form-control form_datetime" placeholder="Cliquer pour ouvrir le calendrier..." required>
                         <span class="add-on"><i class="icon-th"></i></span>
                     </div>
                 </div>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-3">
                 <div class="form-group">
-                    <label for="nbQuestions">Nombre de questions total</label>
-                    <input type="number" class="form-control" min="1" max="30" value="10" name="quizz-nbQuestions" id="nbQuestions" required>
-                </div>
-            </div>
-            <div class="col-md-1">
-                <div class="form-group">
-                    <label for="nbQuestionsDisplayed">Nombre de questions à afficher</label>
-                    <input type="number" class="form-control" min="1" max="10" name="quizz-nbQuestionsDisplayed" id="nbQuestionsDisplayed" required>
+                    <label for="image">Image</label>
+                    <input type="file" class="form-control" name="quizz-image" id="image" required>
                 </div>
             </div>
             <div class="col-md-1">
@@ -92,7 +97,7 @@
         $('#nbQuestions').change(function(){
             $('#nbQuestionsDisplayed').attr('max', $('#nbQuestions').val());
         });
-        
+
         //vérification JS du formulaire
         $('form').submit(function(){
             //check si le nom du quizz n'est pas vide

@@ -36,16 +36,16 @@
                                 <textarea class="form-control" name="<?php echo $i;?>__question" placeholder="Saisir la question" required></textarea>
                             </div>
                             <div class="col-md-12 form-group has-success has-feedback">
-                                <input type="text" style="background: #99e599" class="form-control" name="<?php echo $i;?>__right-answer" placeholder="Réponse correct" required>
+                                <input type="text" style="background: #99e599" class="form-control" name="<?php echo $i;?>__right-answer" placeholder="Réponse correct" required autocomplete="off">
                             </div>
                             <div class="col-md-12 form-group has-warning">
-                                <input type="text" style="background:#e59999" class="form-control" name="<?php echo $i;?>__wrong-answer[]" placeholder="Une mauvaise proposition" required>
+                                <input type="text" style="background:#e59999" class="form-control" name="<?php echo $i;?>__wrong-answer[]" placeholder="Une mauvaise proposition" required autocomplete="off">
                             </div>
                             <div class="col-md-12 form-group has-warning">
-                                <input type="text" style="background:#e59999" class="form-control" name="<?php echo $i;?>__wrong-answer[]" placeholder="Une mauvaise proposition" required>
+                                <input type="text" style="background:#e59999" class="form-control" name="<?php echo $i;?>__wrong-answer[]" placeholder="Une mauvaise proposition" required autocomplete="off">
                             </div>
                             <div class="col-md-12 form-group has-warning">
-                                <input type="text" style="background:#e59999" class="form-control" name="<?php echo $i;?>__wrong-answer[]" placeholder="Une mauvaise proposition" required>
+                                <input type="text" style="background:#e59999" class="form-control" name="<?php echo $i;?>__wrong-answer[]" placeholder="Une mauvaise proposition" required autocomplete="off">
                             </div>
                         </div>
                     </div>

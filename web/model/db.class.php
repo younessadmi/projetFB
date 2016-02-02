@@ -36,14 +36,14 @@ class DB {
         }
     }
 
-    public function addQuizz($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed){
+    public function addQuizz($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed, $filename){
         $res = $this->checkQuizzNameExists($quizzName);
         if($res === false){
             $query2 = $this->connexion->prepare('
-                INSERT INTO quizz (name, date_start, date_end, questions_nb_total, questions_nb_displayed)
-                VALUES(?, ?, ?, ?, ?);
+                INSERT INTO quizz (name, date_start, date_end, questions_nb_total, questions_nb_displayed, img)
+                VALUES(?, ?, ?, ?, ?, ?);
             ');
-            if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed))){
+            if($query2->execute(array($quizzName, $startDate, $endDate, $nbQuestionsTotal, $nbQuestionsDisplayed, $filename))){
                 return true;
             }else return 'Insertion has been not successful ['.$this->getLastError().']';
         }else return $res;
