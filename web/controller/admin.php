@@ -122,6 +122,11 @@ class adminController{
             }else $this->registry->template->show('not_found');
         }else $this->registry->template->show('not_found');
     }
+    
+    public function listUser(){
+        $this->registry->template->players = $this->registry->db->getListPlayer();
+        $this->registry->template->show('admin/listUser');
+    }
 
 }
 ?>

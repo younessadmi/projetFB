@@ -22,10 +22,12 @@
             </a>
         </div>
         <div class="col-md-4">
+           <a href="<?php echo BASE_URL;?>admin/listUser">
             <div style="text-align: center;">
-                <i class="fa fa-pause" style="font-size: 80px;"></i>
-                <p>???????</p>
+                <i class="fa fa-users" style="font-size: 80px;"></i>
+                <p>Utilisateurs</p>
             </div>
+            </a>
         </div>
     </div>
 </div>
