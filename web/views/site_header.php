@@ -22,6 +22,9 @@
 
         <script src='<?php echo BASE_URL;?>js/nprogress.js'></script>
         <link rel='stylesheet' href='<?php echo BASE_URL;?>css/nprogress.css'/>
+        
+        <script src='<?php echo BASE_URL;?>js/sweetalert.min.js'></script>
+        <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/sweetalert.css'>
 
         <link href="<?php echo BASE_URL;?>css/mystyle.css" rel="stylesheet" type="text/css">
         <script src="<?php echo BASE_URL;?>js/functions.js"></script>

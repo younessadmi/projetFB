@@ -277,18 +277,12 @@ class DB {
         $req = $this->connexion->prepare("SELECT * FROM player ORDER BY id");
         if($req->execute())
         {
-            $likes = ['books','music','favorite_athletes','application','devices'];
             $players = [];
             while($res = $req->fetch(PDO::FETCH_ASSOC)){
                 foreach($res as $k => $v)
                 {
-                    if(in_array($k,$likes))
-                    {
-                        $v = str_replace('|',', ',$v);
-                        $res[$k] = $v;
-                    }
-                    elseif($k == 'birthday'){
-                        $v = $this->getBdayFromDate($v);
+                    if($k == 'birthday'){
+                        $v = $this->registry->myFunctions->getAgeFromBday($v);
                         $res[$k] = $v;
                     }
                     elseif($k == 'gender'){
@@ -303,14 +297,6 @@ class DB {
         return $players;
     }
     
-    public function getBdayFromDate($birthDate){
-        $birthDate = explode("-", $birthDate);
-        $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[1], $birthDate[2], $birthDate[0]))) > date("md")
-            ? ((date("Y") - $birthDate[0]) - 1)
-            : (date("Y") - $birthDate[0]));
-
-        return $age;
-    }
 }
 
 
