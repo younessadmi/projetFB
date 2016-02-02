@@ -8,7 +8,7 @@
                 <th>Identifiant</th>
                 <th>Nom</th>
                 <th>Age</th>
-                <th>Sexe</th>
+                <th>Genre</th>
                 <th>Lieu</th>
                 <th>Email</th>
                 <th>Appareils</th>
@@ -16,7 +16,7 @@
                 <th>Livres favoris</th>
                 <th>Artistes favoris</th>
                 <th>Athlètes favoris</th>
-                <th>Dernière connection</th>
+                <th>Dernière connexion</th>
             </tr>
         </thead>
         <tbody>
