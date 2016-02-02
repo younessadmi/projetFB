@@ -1,5 +1,5 @@
 /*
-    primary color: #b757ff
+primary color: #b757ff
 */
 
 .navbar-nav li.divider{
@@ -31,12 +31,29 @@
 
 /*overwrite NProgress*/
 #nprogress .bar {
-  background: #b757ff;
+    background: #b757ff;
 }
 #nprogress .peg {
-  box-shadow: 0 0 10px #b757ff, 0 0 5px #b757ff;
+    box-shadow: 0 0 10px #b757ff, 0 0 5px #b757ff;
 }
 #nprogress .spinner-icon {
-  border-top-color: #b757ff;
-  border-left-color: #b757ff;
+    border-top-color: #b757ff;
+    border-left-color: #b757ff;
+}
+
+hr.style-eight {
+    padding: 0;
+    border: none;
+    border-top: medium double #333;
+    color: #333;
+    text-align: center;
+}
+hr.style-eight:after {
+    content: "♦";
+    display: inline-block;
+    position: relative;
+    top: -0.7em;
+    font-size: 1.5em;
+    padding: 0 0.25em;
+    background-color: #b757ff;
 }

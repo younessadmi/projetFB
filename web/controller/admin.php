@@ -38,7 +38,7 @@ class adminController{
                                                     $this->registry->template->show('admin/addQuizz-step2');
                                                     die();
                                                 }else $this->registry->template->error = $res;
-                                            }else $this->registry->template->error = $uploadImageQuizz;
+                                            }else $this->registry->template->error = (!$uploadImageQuizz)? 'Erreur move upload' : $uploadImageQuizz;
                                         }else $this->registry->template->error = 'The first date is later than the end date';
                                     }else $this->registry->template->error = 'Second date is wrong';
                                 }else $this->registry->template->error = 'First date is wrong';

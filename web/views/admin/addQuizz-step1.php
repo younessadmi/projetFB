@@ -1,6 +1,3 @@
-<?php var_dump($_POST);?>
-<?php var_dump($_FILES);?>
-
 <div>
     <div class="row">
         <div class="col-md-3"></div>
