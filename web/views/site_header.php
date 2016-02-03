@@ -25,6 +25,14 @@
         
         <script src='<?php echo BASE_URL;?>js/sweetalert.min.js'></script>
         <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/sweetalert.css'>
+        
+        <script src='<?php echo BASE_URL;?>js/jquery.dataTables.min.js'></script>
+        <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/jquery.dataTables.min.css'>
+        
+        <script src='<?php echo BASE_URL;?>js/dataTables.buttons.min.js'></script>
+        <script src='<?php echo BASE_URL;?>js/buttons.html5.min.js'></script>
+        <script src='<?php echo BASE_URL;?>js/buttons.colVis.min.js'></script>
+        <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/buttons.dataTables.min.css'>
 
         <link href="<?php echo BASE_URL;?>css/mystyle.css" rel="stylesheet" type="text/css">
         <script src="<?php echo BASE_URL;?>js/functions.js"></script>
