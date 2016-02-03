@@ -1,6 +1,6 @@
 <?php if(count($quizz) > 0){?>
 <div class="table-responsive">
-    <table class="table table-bordered tablesorter">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Etat</th>
@@ -49,6 +49,6 @@
 
 <script>
     $(function(){
-        $(".tablesorter").tablesorter();
+        $(".table").DataTable();
     });
 </script>

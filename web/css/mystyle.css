@@ -20,7 +20,7 @@ primary color: #b757ff
 }
 
 /*.tablesorter th.tablesorter-headerUnSorted { 
-    background-image: url(../img/tablesorter/small.gif);
+background-image: url(../img/tablesorter/small.gif);
 } */
 
 .tablesorter th.tablesorter-header { 
@@ -58,8 +58,13 @@ hr.style-eight:after {
     background-color: #b757ff;
 }
 
+/* Découper les textes trop long */
 .crop{
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#countdown{
+    text-align:center;   
 }
