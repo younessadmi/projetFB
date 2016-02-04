@@ -17,7 +17,7 @@ class adminController{
 
     public function addQuizz(){
         //si on valide l'étape 1
-        $toPostStep1 = ['quizz-name', 'quizz-nbQuestions', 'quizz-nbQuestionsDisplayed', 'quizz-start-datetime', 'quizz-end-datetime', 'submit'];
+        $toPostStep1 = ['quizz-name', 'quizz-nbQuestions', 'quizz-nbQuestionsDisplayed', 'quizz-lot', 'quizz-description', 'quizz-start-datetime', 'quizz-end-datetime', 'submit'];
         if(isset($_POST['submit'])){ // si le formulaire a été soumis
             if(array_keys($_POST) == $toPostStep1){ // si le formulaire envoie bien ce que l'on attend
                 if(is_numeric($_POST['quizz-nbQuestions']) && $_POST['quizz-nbQuestions'] > 0 && $_POST['quizz-nbQuestions'] <= 30){
@@ -25,28 +25,30 @@ class adminController{
                     if($checkUpload === true){
                         if(is_numeric($_POST['quizz-nbQuestionsDisplayed']) && $_POST['quizz-nbQuestionsDisplayed'] > 0 && $_POST['quizz-nbQuestionsDisplayed'] <= $_POST['quizz-nbQuestions']){
                             if(!empty(trim($_POST['quizz-name']))){ // si le nom du quizz n'est pas vide
-                                if($this->registry->myFunctions->validateDate($_POST['quizz-start-datetime'], 'd/m/Y H:i')){ //si la date de début est valide
-                                    if($this->registry->myFunctions->validateDate($_POST['quizz-end-datetime'], 'd/m/Y H:i')){ //si la date de fin est valide
-                                        $startDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-start-datetime']);
-                                        $endDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-end-datetime']);
-                                        if($startDate->getTimestamp() < $endDate->getTimestamp()){ //si la date de début est avant la date de fin
-                                            $filename = htmlentities(substr(date('Y-m-d_H-i-s').'__'.$_FILES['quizz-image']['name'], 0, 100));
-                                            if(($uploadImageQuizz = $this->registry->myFunctions->uploadImageQuizz($_FILES['quizz-image'], $filename)) === true){
-                                                if(($res = $this->registry->db->addQuizz($_POST['quizz-name'], $startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s'), $_POST['quizz-nbQuestions'], $_POST['quizz-nbQuestionsDisplayed'], $filename)) === true){
-                                                    $this->registry->template->idQuizz = $this->registry->db->getIdQuizzByName($_POST['quizz-name']);
-                                                    $this->registry->template->nbQuestions = $_POST['quizz-nbQuestions'];
-                                                    $this->registry->template->show('admin/addQuizz-step2');
-                                                    die();
-                                                }else $this->registry->template->error = $res;
-                                            }else $this->registry->template->error = (!$uploadImageQuizz)? 'Erreur move upload' : $uploadImageQuizz;
-                                        }else $this->registry->template->error = 'The first date is later than the end date';
-                                    }else $this->registry->template->error = 'Second date is wrong';
-                                }else $this->registry->template->error = 'First date is wrong';
-                            }else $this->registry->template->error = 'The quizz name is empty';
+                                if(!empty(trim($_POST['quizz-lot']))){ // si le nom du quizz n'est pas vide
+                                    if($this->registry->myFunctions->validateDate($_POST['quizz-start-datetime'], 'd/m/Y H:i')){ //si la date de début est valide
+                                        if($this->registry->myFunctions->validateDate($_POST['quizz-end-datetime'], 'd/m/Y H:i')){ //si la date de fin est valide
+                                            $startDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-start-datetime']);
+                                            $endDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-end-datetime']);
+                                            if($startDate->getTimestamp() < $endDate->getTimestamp()){ //si la date de début est avant la date de fin
+                                                $filename = htmlentities(substr(date('Y-m-d_H-i-s').'__'.$_FILES['quizz-image']['name'], 0, 100));
+                                                if(($uploadImageQuizz = $this->registry->myFunctions->uploadImageQuizz($_FILES['quizz-image'], $filename)) === true){
+                                                    if(($res = $this->registry->db->addQuizz($_POST['quizz-name'], $startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s'), $_POST['quizz-nbQuestions'], $_POST['quizz-nbQuestionsDisplayed'], $filename, $_POST['quizz-lot'], $_POST['quizz-description'])) === true){
+                                                        $this->registry->template->idQuizz = $this->registry->db->getIdQuizzByName($_POST['quizz-name']);
+                                                        $this->registry->template->nbQuestions = $_POST['quizz-nbQuestions'];
+                                                        $this->registry->template->show('admin/addQuizz-step2');
+                                                        die();
+                                                    }else $this->registry->template->error = $res;
+                                                }else $this->registry->template->error = (!$uploadImageQuizz)? 'Erreur move upload' : $uploadImageQuizz;
+                                            }else $this->registry->template->error = 'La date de début est après la date de fin';
+                                        }else $this->registry->template->error = 'La date de fin est fausse';
+                                    }else $this->registry->template->error = 'La date de début est fausse';
+                                }else $this->registry->template->error = 'Le nom du quizz est incorrect';
+                            }else $this->registry->template->error = 'Le nom du quizz est incorrect';
                         }else $this->registry->template->error = 'Le nombre de questions est incorrect';
                     }else $this->registry->template->error = $checkUpload;
                 }else $this->registry->template->error = 'Le nombre de questions est incorrect';
-            }else $this->registry->template->error = 'Keys are not similar';
+            }else $this->registry->template->error = 'Les clées POST ne sont pas celles attendues';
         }
 
         //si on valide l'étape 2
@@ -101,15 +103,14 @@ class adminController{
     public function editQuizz($args){
         //si on édite le quizz
         if(isset($_POST['submit']) && $_POST['submit'] == 'update'){
-            $post_expected = ['enabled', 'idquizz', 'name', 'original-name', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
-            $post_expected2 = ['idquizz', 'name', 'original-name', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
+            $post_expected = ['enabled', 'idquizz', 'name', 'original-name', 'description', 'lot', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
+            $post_expected2 = ['idquizz', 'name', 'original-name', 'description', 'lot', 'questions_nb_displayed', 'questions_nb_total', 'submit'];
             if($post_expected == array_keys($_POST) || $post_expected2 == array_keys($_POST)){
                 if(is_numeric($_POST['idquizz'])){
                     if(strlen(trim($_POST['name'])) > 0){
                         if(is_numeric($_POST['questions_nb_displayed'])){
                             if($_POST['original-name'] == $_POST['name'] || $this->registry->db->checkQuizzNameExists($_POST['name']) === false){
-                                $res = $this->registry->db->updateQuizz($_POST['idquizz'], $_POST['name'], null, null, ((isset($_POST['enabled']))? 1 : 0), $_POST['questions_nb_displayed'], null);
-                                if($res === true){
+                                if(($res = $this->registry->db->updateQuizz($_POST['idquizz'], $_POST['name'], null, null, ((isset($_POST['enabled']))? 1 : 0), $_POST['questions_nb_displayed'], null, $_POST['description'], $_POST['lot'])) === true){
                                     $this->registry->template->success = 'Le quizz a bien été mis à jour';
                                 }else $this->registry->template->error = $res;
                             }else $this->registry->template->error = 'Nom de quizz déjà existant';
@@ -127,7 +128,7 @@ class adminController{
             }else $this->registry->template->show('not_found');
         }else $this->registry->template->show('not_found');
     }
-    
+
     public function listUser(){
         $this->registry->template->players = $this->registry->db->getListPlayer();
         $this->registry->template->show('admin/listUser');

@@ -97,7 +97,8 @@
             swal({
                 title: $(this).attr("data-header"),
                 text: html,
-                html: true
+                html: true,
+                allowOutsideClick: true
             });
         });
     });

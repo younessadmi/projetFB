@@ -37,6 +37,18 @@
                     <input type="number" class="form-control" min="1" max="10" value="<?php echo ((isset($_POST['quizz-nbQuestionsDisplayed']))? $_POST['quizz-nbQuestionsDisplayed']: '');?>" name="quizz-nbQuestionsDisplayed" id="nbQuestionsDisplayed" required>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="quizz-lot">Lot à gagner</label>
+                    <textarea id="quizz-lot" name="quizz-lot" placeholder="Lot..." class="form-control" rows="3" required></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="quizz-description">Description (optional)</label>
+                    <textarea id="quizz-description" name="quizz-description" placeholder="Description..." class="form-control" rows="3"></textarea>
+                </div>
+            </div>
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="quizz-start-datetime">Date de début</label>
@@ -61,9 +73,11 @@
                     <input type="file" class="form-control" name="quizz-image" id="image" required>
                 </div>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-3">
                 <br>
-                <button type="submit" name="submit" class="btn btn-link"><i class="fa fa-arrow-circle-right" style="font-size:30px"></i></button>
+                <button type="submit" name="submit" class="btn btn-success" style="width:100%">
+                    <i class="fa fa-arrow-circle-right" style="font-size:30px"></i>
+                </button>
             </div>
         </div>
     </form>

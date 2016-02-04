@@ -4,7 +4,7 @@
         <title><?php echo APP_TITLE;?></title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-<!--        <link rel="icon" href="<?php echo BASE_URL;?>img/favicon.ico">-->
+        <!--        <link rel="icon" href="<?php echo BASE_URL;?>img/favicon.ico">-->
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">        
 
         <script src="<?php echo BASE_URL;?>js/jquery-2.2.0.min.js"></script>
@@ -22,17 +22,21 @@
 
         <script src='<?php echo BASE_URL;?>js/nprogress.js'></script>
         <link rel='stylesheet' href='<?php echo BASE_URL;?>css/nprogress.css'/>
-        
+
         <script src='<?php echo BASE_URL;?>js/sweetalert.min.js'></script>
         <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/sweetalert.css'>
-        
+
+
         <script src='<?php echo BASE_URL;?>js/jquery.dataTables.min.js'></script>
         <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/jquery.dataTables.min.css'>
-        
+
         <script src='<?php echo BASE_URL;?>js/dataTables.buttons.min.js'></script>
         <script src='<?php echo BASE_URL;?>js/buttons.html5.min.js'></script>
         <script src='<?php echo BASE_URL;?>js/buttons.colVis.min.js'></script>
         <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/buttons.dataTables.min.css'>
+
+        <script src='<?php echo BASE_URL;?>js/jquery.countdown360.js'></script>
+
 
         <link href="<?php echo BASE_URL;?>css/mystyle.css" rel="stylesheet" type="text/css">
         <script src="<?php echo BASE_URL;?>js/functions.js"></script>

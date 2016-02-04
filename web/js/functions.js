@@ -1,4 +1,8 @@
 var base_url = '';
+var questionsIdUnCompleted = new Array();
+$(document).ready(function(){
+
+});
 
 function setBaseUrl(url){
     base_url = url;   
@@ -30,4 +34,138 @@ function updateQuestion(idQuestion, idPropositions, question){
     }).always(function(){
         NProgress.done();
     });
+}
+
+function launchQuizz(quizz){
+    for(question in quizz.questions){
+        questionsIdUnCompleted.push(parseInt(question));
+    }
+    //    console.log(quizz);
+    setQuestion(quizz);
+}
+
+function setQuestion(quizz){
+    //choix de la question
+    //traitement anti doublon pour le choix de la question
+    var randomIdQuestion = questionsIdUnCompleted[getRandomArbitrary(0, questionsIdUnCompleted.length)];
+    var index = questionsIdUnCompleted.indexOf(randomIdQuestion);
+    if(index > -1){
+        questionsIdUnCompleted.splice(index, 1);
+    }
+    //initialisation du countdown
+    var countdown = $("#countdown").countdown360({
+        radius: 60,
+        seconds: 5,
+        label: false,
+        fontColor: '#FFFFFF',
+        autostart: false,
+        onComplete: function(){
+            setAnswer(quizz, null, $('[data-id-quizz]').attr('data-id-quizz'), $('[data-id-question]').attr('data-id-question'), null, null);
+        }
+    });
+    //insertion des données
+    $("#quizz").fadeOut('slow', function(){
+        $('#question').attr('data-id-question', randomIdQuestion).text(quizz.questions[randomIdQuestion].question);
+        $('#number-question-status').text((quizz.questions_nb_total - questionsIdUnCompleted.length) +"/"+quizz.questions_nb_displayed);
+        //choix des réponses
+        //traitement anti doublon pour le choix de la réponse
+        var reponsesIdStillUnDisplayed = new Array();
+        for(proposition in quizz.questions[randomIdQuestion].propositions){
+            reponsesIdStillUnDisplayed.push(parseInt(proposition));
+        }
+        $('button[data-nb]').each(function(i, e){
+            $(this).text("");
+            $(this).unbind("click");
+            $(this).removeClass('btn-success').addClass('btn-default');
+            $(this).removeClass('btn-danger').addClass('btn-default');
+        });
+
+        $('button[data-nb]').each(function(i, e){
+            if($(this).text() == ""){
+                var randomValue = getRandomArbitrary(0, reponsesIdStillUnDisplayed.length);
+                $(this).attr('data-id-proposition', reponsesIdStillUnDisplayed[randomValue]);
+                $(this).text(quizz.questions[randomIdQuestion].propositions[reponsesIdStillUnDisplayed[randomValue]].proposition);
+                var index = reponsesIdStillUnDisplayed.indexOf(reponsesIdStillUnDisplayed[randomValue]);
+                if(index > -1){
+                    reponsesIdStillUnDisplayed.splice(index, 1);
+                }
+                $(this).prop("disabled", false);
+                $(this).click(function(){
+                    setAnswer(quizz, countdown, $('[data-id-quizz]').attr('data-id-quizz'), $('[data-id-question]').attr('data-id-question'), $(this).attr('data-id-proposition'), $(this));
+                });
+            }
+        });
+
+        $("#quizz").fadeIn('slow');
+        countdown.start();
+    });
+}
+
+function setAnswer(quizz, countdown, idQuizz, idQuestion, idProposition, button){
+    var time = 10000;
+
+    if(countdown != null){
+        countdown.stop();
+        time = countdown.getElapsedTimeMs();
+    }    
+
+    //    var success = undefined;
+    //    var failure = undefined;
+    var idFb = $('[data-id-fb]').attr('data-id-fb');
+    var score = 10000 - time;
+
+    if(button != null){
+        if(quizz.questions[idQuestion].propositions[idProposition].is_correct == 1){
+            button.removeClass('btn-default').addClass('btn-success');
+            //            success = true;
+        }else{
+            //            failure = true;
+            button.removeClass('btn-default').addClass('btn-danger');
+            $('button[data-nb]').each(function(i, e){
+                if(quizz.questions[idQuestion].propositions[$(this).attr('data-id-proposition')].is_correct == 1){
+                    $(this).removeClass('btn-default').addClass('btn-success');
+                }
+            });
+        }
+        nextQuestion(quizz);
+    }else{
+        $('button[data-nb]').each(function(i, e){
+            if(quizz.questions[idQuestion].propositions[$(this).attr('data-id-proposition')].is_correct == 1){
+                $(this).removeClass('btn-default').addClass('btn-success');
+            }
+        });
+        nextQuestion(quizz);
+    }
+
+    
+
+    /*
+        A
+        J
+        A
+        X
+    */
+
+    //    console.info(countdown, idQuizz, idQuestion, idProposition, button);
+}
+
+function nextQuestion(quizz){
+    $('button[data-nb]').each(function(i, e){
+        $(this).prop("disabled", true);
+        $(this).unbind("unclick");
+    });
+    if((quizz.questions_nb_total - quizz.questions_nb_displayed) != questionsIdUnCompleted.length){
+        setTimeout(function(){
+            setQuestion(quizz)
+        }, 2000);
+    }else endOfQuizz(quizz);
+}
+
+function endOfQuizz(quizz){
+    //thibault
+    console.info('Fin du quizz');   
+}
+
+function getRandomArbitrary(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;
 }

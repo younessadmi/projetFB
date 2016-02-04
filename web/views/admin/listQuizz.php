@@ -1,11 +1,13 @@
 <?php if(count($quizz) > 0){?>
 <div class="table-responsive">
-    <table class="table table-bordered tablesorter">
+    <table class="table table-bordered">
         <thead>
             <tr>
                 <th>Etat</th>
                 <th>Identifiant</th>
                 <th>Nom</th>
+                <th>Description</th>
+                <th>Lot à gagner</th>
                 <th>Date de début</th>
                 <th>Date de fin</th>
                 <th>Nombre de questions affichées</th>
@@ -19,12 +21,14 @@
         echo '
             <tr '.((!$q['enabled'])? 'class=warning' : '' ).'>
                 <td>'.(($q['enabled'])? 'Activé' : 'Désactivé' ).'</td>
-                <td>'.$q['id'].'</td>
-                <td>'.$q['name'].'</td>
-                <td>'.$q['date_start'].'</td>
-                <td>'.$q['date_end'].'</td>
-                <td>'.$q['questions_nb_displayed'].'</td>
-                <td>'.$q['questions_nb_total'].'</td>
+                <td>'.htmlentities($q['id']).'</td>
+                <td>'.htmlentities(substr($q['name'], 0, 100)).'</td>
+                <td>'.htmlentities(substr($q['description'], 0, 100)).'</td>
+                <td>'.htmlentities(substr($q['lot'], 0, 100)).'</td>
+                <td>'.htmlentities(substr($q['date_start'], 0, 100)).'</td>
+                <td>'.htmlentities(substr($q['date_end'], 0, 100)).'</td>
+                <td>'.htmlentities(substr($q['questions_nb_displayed'], 0, 100)).'</td>
+                <td>'.htmlentities(substr($q['questions_nb_total'], 0, 100)).'</td>
                 <td><a href="'.BASE_URL.'admin/editQuizz/'.$q['id'].'"><i class="fa fa-pencil-square-o"></i></a></td>
             </tr>
        ';
@@ -45,6 +49,6 @@
 
 <script>
     $(function(){
-        $(".tablesorter").tablesorter();
+        $(".table").DataTable();
     });
 </script>
