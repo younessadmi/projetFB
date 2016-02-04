@@ -29,8 +29,30 @@ class ajaxController extends baseController {
             $idQuizz = $_POST['id'];
             $json_data['quizz'] = $this->registry->db->getQuestionsByIdQuizz($_POST['id']);
         }else $json_data['error'] = "Erreur d'id";   
-        
+
         echo json_encode($json_data);
+    }
+
+    public function insertAnswer(){
+        if(isset($_POST['idQuizz']) && isset($_POST['idQuestion']) && isset($_POST['idProposition']) && isset($_POST['idFb']) && isset($_POST['time'])){
+            $idFb = $_POST['idFb'];
+            $idQuestion = $_POST['idQuestion'];
+            $idProposition = $_POST['idProposition'];
+            $time = $_POST['time'];
+            $idQuizz = $_POST['idQuizz'];
+            $json_data = [$idFb, $idQuestion, $idProposition, $time, $idQuizz];
+
+            //vérification à faire
+            if(($res = $this->registry->db->insertAnswer($idFb, $idQuestion, $idProposition, $time, $idQuizz)) === true){
+                $json_data['message'] = '';
+                $json_data['success'] = true;
+            }else{
+                $json_data['message'] = $res;
+                $json_data['success'] = false;
+            }
+
+            echo json_encode($json_data);
+        }
     }
 }
 ?>

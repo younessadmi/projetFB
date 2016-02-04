@@ -40,7 +40,6 @@ function launchQuizz(quizz){
     for(question in quizz.questions){
         questionsIdUnCompleted.push(parseInt(question));
     }
-    //    console.log(quizz);
     setQuestion(quizz);
 }
 
@@ -107,19 +106,14 @@ function setAnswer(quizz, countdown, idQuizz, idQuestion, idProposition, button)
     if(countdown != null){
         countdown.stop();
         time = countdown.getElapsedTimeMs();
-    }    
+    }
 
-    //    var success = undefined;
-    //    var failure = undefined;
     var idFb = $('[data-id-fb]').attr('data-id-fb');
-    var score = 10000 - time;
 
     if(button != null){
         if(quizz.questions[idQuestion].propositions[idProposition].is_correct == 1){
             button.removeClass('btn-default').addClass('btn-success');
-            //            success = true;
         }else{
-            //            failure = true;
             button.removeClass('btn-default').addClass('btn-danger');
             $('button[data-nb]').each(function(i, e){
                 if(quizz.questions[idQuestion].propositions[$(this).attr('data-id-proposition')].is_correct == 1){
@@ -136,17 +130,21 @@ function setAnswer(quizz, countdown, idQuizz, idQuestion, idProposition, button)
         });
         nextQuestion(quizz);
     }
-
     
-
-    /*
-        A
-        J
-        A
-        X
-    */
-
-    //    console.info(countdown, idQuizz, idQuestion, idProposition, button);
+    $.ajax({
+        url: base_url+'ajax/insertAnswer',
+        method: 'POST',
+        data: { idQuizz: idQuizz, idQuestion: idQuestion, idProposition: idProposition, idFb: idFb, time: time },
+        dataType: 'JSON'
+    }).done(function(data, textStatus, jqXHR){
+        console.info(data);
+        if(!data['success']){
+            printMessage("Une erreur est survenu lors de l'enregistrement de votre réponse", "danger");
+            console.error(data['message']);
+        }
+    }).fail(function(jqXHR, textStatus, errorThrown){
+        console.error(jqXHR);
+    });
 }
 
 function nextQuestion(quizz){

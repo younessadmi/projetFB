@@ -182,7 +182,7 @@ class DB {
             }else return $toEnabled->execute(array($idQuizz));
         }else return false;
     }
-    
+
     public function insertUserInfo($data){
         $id_fb = $data['id_fb'];
         $isset = $this->doesUserExist($id_fb);
@@ -280,13 +280,13 @@ class DB {
         }elseif($type == 'proposition'){
             $sql = 'UPDATE proposition SET label = ? WHERE id = ?';
         }else return 'Type not defined';
-        
+
         $query = $this->connexion->prepare($sql);
         if($query->execute(array($label, $id))){
             return true;
         }else return 'Error lors de l execute.. label:'.$label.', id:'.$id.'.';
     }
-    
+
     public function getListPlayer(){
         $req = $this->connexion->prepare("SELECT * FROM player ORDER BY id");
         if($req->execute())
@@ -307,10 +307,50 @@ class DB {
                 $players[$res['id']] = $res;
             }
         }else return "error while getting users list";
-        
+
         return $players;
     }
-    
+
+    public function getUserIdByIdFb($idFb){
+        $query = $this->connexion->prepare('SELECT id FROM player WHERE id_fb = ?');
+        if($query->execute([$idFb])){
+            $query = $query->fetch(PDO::FETCH_ASSOC);
+            return $query['id'];
+        }else return false;
+    }
+
+    public function insertAnswer($idFb, $idQuestion, $idProposition, $time, $idQuizz){
+        $score = 10000 - $time;
+        $idPlayer = $this->getUserIdByIdFb($idFb);
+
+        //check si la proposition 0 existe
+        if($idProposition == null){
+            $idProposition = 0;
+            $query = $this->connexion->query('SELECT COUNT(*) AS nb FROM proposition WHERE id=0')->fetch(PDO::FETCH_ASSOC);
+            if($query['nb'] == 0){
+                $query = $this->connexion->prepare('INSERT INTO proposition(id, label) VALUES(?, ?)');
+                if(!$query->execute([0, '<no_response>'])){
+                    return $this->getLastError();
+                }
+            }
+        }
+
+        $query = $this->connexion->prepare('
+            INSERT INTO choice(id_player, id_question, id_proposition, time, id_quizz, score)
+            SELECT ?, ?, ?, ?, ?, (?*
+                COALESCE(
+                    (
+                        SELECT is_correct
+                        FROM answer
+                        WHERE id_question = ?
+                        AND id_proposition = ?
+                    ), 0)
+            )
+        ');
+        if($query->execute([$idPlayer, $idQuestion, $idProposition, $time, $idQuizz, $score, $idQuestion, $idProposition])){
+            return true;
+        }else return $this->getLastError();
+    }
 }
 
 
