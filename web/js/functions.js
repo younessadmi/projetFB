@@ -130,7 +130,7 @@ function setAnswer(quizz, countdown, idQuizz, idQuestion, idProposition, button)
         });
         nextQuestion(quizz);
     }
-    
+
     $.ajax({
         url: base_url+'ajax/insertAnswer',
         method: 'POST',
@@ -160,8 +160,9 @@ function nextQuestion(quizz){
 }
 
 function endOfQuizz(quizz){
+    window.onbeforeunload = null;
     //thibault
-    console.info('Fin du quizz');   
+    console.info('Fin du quizz');
 }
 
 function getRandomArbitrary(min, max) {
