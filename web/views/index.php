@@ -16,7 +16,7 @@
                 </a>
             </div>
             <div class="col-md-4">
-                <button type="button" class="btn btn-link" style="width:100%">???????</button>
+                    <button type="button" class="btn btn-link" style="width:100%">??????</button>
             </div>
         </div>
     </div>
