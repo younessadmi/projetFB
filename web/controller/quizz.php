@@ -19,7 +19,7 @@ class quizzController extends baseController {
             $quizz = $this->registry->db->getInfoQuizz($args[0]);
             $this->registry->template->quizz = $quizz[$args[0]];
             $idFb = $this->registry->fb->getCurrentUserId();
-            $idPlayer = $this->registry->db->getIdByIdFb($idFb);
+            $idPlayer = $this->registry->db->getUserIdByIdFb($idFb);
             $this->registry->template->idPlayer = $idPlayer;
             $this->registry->template->results = $this->registry->db->getResultsByIdQuizz($args[0]);
             $this->registry->template->myresults = $this->registry->db->getResultsByIdQuizz($args[0],$idPlayer);

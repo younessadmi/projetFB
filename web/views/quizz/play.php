@@ -33,8 +33,8 @@
 
 
 <script>
-    $(document).ready(function(){        
-        //
+    $(document).ready(function(){
+        //Si le quizz n'a jamais été fait
         var quizz = undefined;
         var welcome_message = "<p>Bienvenue sur le quizz <b><?php echo htmlentities($quizz['name']);?></b> !</p><p>Répondez correctement aux <b><?php echo htmlentities($quizz['questions_nb_displayed']);?></b> questions en un minimum de temps pour tenter de remporter <b>\"<?php echo htmlentities($quizz['lot']);?>\"</b> !</p><p>Bonne chance, et que le meilleur gagne !</p>";
         var availability = "<i class='fa fa-calendar'></i> <b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_start'])->format('d/m/Y H:i:s');?></b> <i class='fa fa-chevron-right'></i> <b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_end'])->format('d/m/Y H:i:s');?></b>";
@@ -67,6 +67,7 @@
                         allowEscapeKey: false,
                         closeOnConfirm: true
                     },function(){
+                        window.onbeforeunload = function(){ return "Attention, si vous quittez la partie, vous confirmez déclarer forfait et obtiendrez 0 pour ce quizz."};
                         launchQuizz(data.quizz);
                     });
                 }).fail(function(jqXHR, textStatus, errorThrown){
