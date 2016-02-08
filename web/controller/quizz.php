@@ -31,6 +31,7 @@ class quizzController extends baseController {
                 $this->registry->template->idPlayer = $idPlayer;
                 $this->registry->template->results = $this->registry->db->getResultsByIdQuizz($args[0]);
                 $this->registry->template->myresults = $this->registry->db->getResultsByIdQuizz($args[0],$idPlayer);
+                $myresults = $this->registry->db->getResultsByIdQuizz($args[0],$idPlayer);
                 if(strtotime($quizz[$args[0]]['date_end'])>time() && empty($myresults)){
                     header('Location: '.BASE_URL.'quizz/play/'.$args[0]);
                 }else $this->registry->template->show('quizz/results');
