@@ -311,6 +311,44 @@ class DB {
         return $players;
     }
     
+    public function getResultsByIdQuizz($idQuizz, $idPlayer = 'ALL')
+    {
+        $sql = 'SELECT first_name, last_name, id_player, SUM(score) AS total FROM choice 
+        INNER JOIN player ON choice.id_player = player.id 
+        WHERE id_quizz = ?'.(($idPlayer == 'ALL')? ' ' : ' AND id_player = ?');
+        $sql .= ' GROUP BY id_player, first_name, last_name';
+        $sql .= ' ORDER BY total DESC';
+        $req = $this->connexion->prepare($sql);
+        if($idPlayer == 'ALL')
+        {
+            if($req->execute(array($idQuizz)))
+            {
+                $results = [];
+                while($res = $req->fetch(PDO::FETCH_ASSOC))
+                {
+                    $results[$res['id_player']] = $res;
+                }
+            }else return $this->getLastError();
+        }else{
+            if($req->execute(array($idQuizz,$idPlayer)))
+            {
+                $results = [];
+                while($res = $req->fetch(PDO::FETCH_ASSOC))
+                {
+                    $results[$res['id_player']] = $res;
+                }
+            }else return $this->getLastError();
+        }
+        return $results;
+    }
+    
+    public function getIdByIdFb($id_fb){
+        $req = $this->connexion->prepare('SELECT id FROM player WHERE id_fb = ?');
+        if($req->execute(array($id_fb))){
+            $res = $req->fetch(PDO::FETCH_ASSOC);
+            return $res['id'];
+        }else return $this->getLastError();
+    }
 }
 
 
