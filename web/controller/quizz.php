@@ -8,12 +8,19 @@ class quizzController extends baseController {
     public function play($args){
         if(isset($args[0]) && filter_var($args[0], FILTER_VALIDATE_INT)){
             $quizz = $this->registry->db->getInfoQuizz($args[0]);
-            $this->registry->template->quizz = $quizz[$args[0]];
-            $this->registry->template->idFb = $this->registry->fb->getCurrentUserId();
-            $this->registry->template->show('quizz/play');
+            if(!empty($quizz)){
+                $quizz = $quizz[$args[0]];
+                if($quizz['enabled'] == 1){
+                    if(strtotime($quizz['date_end']) > time()){
+                        $quizz = $this->registry->db->getInfoQuizz($args[0]);
+                        $this->registry->template->idFb = $this->registry->fb->getCurrentUserId();
+                        $this->registry->template->show('quizz/play');
+                    }else header('Location: '.BASE_URL.'quizz/results/'.$args[0]);
+                }else $this->registry->template->show('not_found');
+            }else $this->registry->template->show('not_found');
         }else $this->registry->template->show('not_found');
     }
-    
+
     public function results($args){
         if(isset($args[0]) && filter_var($args[0], FILTER_VALIDATE_INT)){
             $quizz = $this->registry->db->getInfoQuizz($args[0]);
