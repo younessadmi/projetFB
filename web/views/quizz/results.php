@@ -26,7 +26,7 @@ if(strtotime($quizz['date_end']) < time()){ ?>
                    ';
                     $i++;
                 }
-                if(!array_key_exists($idPlayer,$topten)){
+                if(!array_key_exists($idPlayer,$topten) && !empty($myresults)){
                     $results = array_values($results);
                     $player = array_search($idPlayer,$results);
                     echo '
