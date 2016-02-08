@@ -10,20 +10,30 @@
             <p style="text-align:center" class="crop"><i class="fa fa-trophy" style="font-size:20px"></i> <?php echo htmlentities($quiz['lot']);?></p>
         </div>
         <div class="row">
-            <div class="col-md-8">
+            <?php if($quiz['isAbleToPlay'] && strtotime($quiz['date_end']) > time()){?> 
+            <div class="col-md-12">
                 <a href="<?php echo BASE_URL;?>quizz/play/<?php echo $quiz['id'];?>">
-                    <button type="button" class="btn btn-default" style="width:100%">Jouer <i class="fa fa-chevron-right"></i></button>
+                    <button type="button" class="btn btn-default" style="width:100%">
+                        Jouer <i class="fa fa-chevron-right"></i>
+                    </button>
                 </a>
             </div>
-            <div class="col-md-4">
-                <button type="button" class="btn btn-link" style="width:100%">???????</button>
+            <?php }else{?>
+            <div class="col-md-6">
+                <a href="<?php echo BASE_URL;?>quizz/results/<?php echo $quiz['id'];?>">
+                    <button type="button" class="btn btn-default" style="width:100%">
+                        Scores <i class="fa fa-chevron-right"></i>
+                    </button>
+                </a>
             </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-link" style="width:100%">
+                    <?php echo (!$quiz['isAbleToPlay'])? $quiz['score'] : '';?>
+                </button>
+            </div>
+            <?php }?>
         </div>
     </div>
     <?php }?>
     <?php }?>
 </div>
-
-<style>
-
-</style>

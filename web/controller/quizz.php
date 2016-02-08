@@ -13,7 +13,7 @@ class quizzController extends baseController {
             $this->registry->template->show('quizz/play');
         }else $this->registry->template->show('not_found');
     }
-    
-    
+
+
 }
 ?>

@@ -351,6 +351,53 @@ class DB {
             return true;
         }else return $this->getLastError();
     }
+
+    public function isAbleToPlay($idFb, $idQuizz){
+        $sql = '
+            SELECT COUNT(*) AS nb
+            FROM choice
+            WHERE 
+                    id_player = ?
+            AND 	id_quizz = ?
+        ';
+        $query = $this->connexion->prepare($sql);
+        if($query->execute([$this->getUserIdByIdFb($idFb), $idQuizz])){
+            if($query = $query->fetch(PDO::FETCH_ASSOC)){
+                if($query['nb'] == 0){
+                    return true;
+                }else return false;
+            }else return 'Erreur fetch db';
+        }else return 'Erreur d execute db';
+    }
+
+    //to keep
+    public function getResultsByIdQuizz($idQuizz, $idPlayer = 'ALL')
+    {
+        $sql = 'SELECT id_player, SUM(score) AS total FROM choice WHERE id_quizz = ?'.(($idPlayer == 'ALL')? ' ' : ' AND id_player = ?');
+        $sql .= ' GROUP BY id_player';
+        $req = $this->connexion->prepare($sql);
+        if($idPlayer == 'ALL')
+        {
+            if($req->execute(array($idQuizz)))
+            {
+                $results = [];
+                while($res = $req->fetch(PDO::FETCH_ASSOC))
+                {
+                    $results[$res['id_player']] = $res['total'];
+                }
+            }else return $this->getLastError();
+        }else{
+            if($req->execute(array($idQuizz,$idPlayer)))
+            {
+                $results = [];
+                while($res = $req->fetch(PDO::FETCH_ASSOC))
+                {
+                    $results[$res['id_player']] = $res['total'];
+                }
+            }else return $this->getLastError();
+        }
+        return $results;
+    }
 }
 
 
