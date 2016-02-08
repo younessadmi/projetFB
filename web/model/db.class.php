@@ -401,14 +401,6 @@ class DB {
         }
         return $results;
     }
-    
-    public function getIdByIdFb($id_fb){
-        $req = $this->connexion->prepare('SELECT id FROM player WHERE id_fb = ?');
-        if($req->execute(array($id_fb))){
-            $res = $req->fetch(PDO::FETCH_ASSOC);
-            return $res['id'];
-        }else return $this->getLastError();
-    }
 }
 
 
