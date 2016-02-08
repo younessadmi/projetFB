@@ -13,7 +13,18 @@ class quizzController extends baseController {
             $this->registry->template->show('quizz/play');
         }else $this->registry->template->show('not_found');
     }
-
-
+    
+    public function results($args){
+        if(isset($args[0]) && filter_var($args[0], FILTER_VALIDATE_INT)){
+            $quizz = $this->registry->db->getInfoQuizz($args[0]);
+            $this->registry->template->quizz = $quizz[$args[0]];
+            $idFb = $this->registry->fb->getCurrentUserId();
+            $idPlayer = $this->registry->db->getIdByIdFb($idFb);
+            $this->registry->template->idPlayer = $idPlayer;
+            $this->registry->template->results = $this->registry->db->getResultsByIdQuizz($args[0]);
+            $this->registry->template->myresults = $this->registry->db->getResultsByIdQuizz($args[0],$idPlayer);
+            $this->registry->template->show('quizz/results');
+        }else $this->registry->template->show('not_found');
+    }
 }
 ?>
