@@ -21,7 +21,7 @@ class fb {
     }
 
     private function __construct($registry){
-        $permissions = ['user_birthday', 'user_games_activity', 'user_likes', 'user_location', 'email', 'publish_actions'];
+        $permissions = ['user_birthday', 'user_games_activity', 'user_likes', 'user_location', 'email'];
         require_once __SITE_PATH.'/includes/facebook-php-sdk-v4-5.0.0/src/Facebook/autoload.php';
         $fb = new Facebook\Facebook([
             'app_id' => APP_ID,
@@ -94,26 +94,26 @@ class fb {
 
     private function collectUserInfo($id_user){
         $return = [];
-                
+
         if($this->registry->is_admin)
             $return['is_admin'] = 1;
         else
             $return['is_admin'] = 0;
-        
+
         try{
             $user_data = $this->fb->get('/'.$id_user.'?fields=first_name,last_name,birthday,gender,location,devices,email')->getGraphUser()->AsArray();
         }catch(Facebook\Exceptions\FacebookResponseException $e){
             echo $e->getMessage();
             exit;
         }
-        
+
         try{
             $user_likes = $this->fb->get('/'.$id_user.'?fields=books{name},music{name},favorite_athletes,scores{application{name}}')->getGraphUser()->AsArray();
         }catch(Facebook\Exceptions\FacebookResponseException $e){
             echo $e->getMessage();
             exit;
         }
-        
+
         foreach($user_data as $key => $data){
             if($data instanceof DateTime)
             {
@@ -176,15 +176,31 @@ class fb {
                 }
             }
         }
-        
+
         $return['last_update'] = date('Y-m-d H:i:s');
         $return['id_fb'] = $id_user;
-        
+
         /*var_dump($return);
         echo "<br><hr><br>";
         var_dump($user_data);*/
-        
+
         return $return;
     }
-    
+
+    public function addPermission($new_perm){
+        $permissions = $this->fb->get('/me/permissions')->getGraphEdge()->asArray();
+        $helper = $this->fb->getRedirectLoginHelper();
+        $$new_perm = false;
+        foreach($permissions as $permission){
+            if($permission['permission'] == $new_perm && $permission['status'] != 'granted'){
+                header("Location: ".$helper->getLoginUrl(BASE_URL.'scripts/login.php', ['scope' => $new_perm]));
+            }
+            if($permission['permission'] == $new_perm){
+                $$new_perm = true;
+            }
+        }
+        if(!$$new_perm){
+            header("Location: ".$helper->getLoginUrl(BASE_URL.'scripts/login.php', ['scope' => $new_perm]));
+        }
+    }
 }
