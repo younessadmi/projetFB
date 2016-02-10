@@ -47,15 +47,18 @@ class myFunctions {
         return $age;
     }
 
-    public function uploadImageQuizz($file, $filename){
-        $dir =  __SITE_PATH.DIRECTORY_SEPARATOR.'img'.DIRECTORY_SEPARATOR.'quizz-main-picture'.DIRECTORY_SEPARATOR;
-        if(!is_dir($dir) && !file_exists($dir)){
-            if(!mkdir($dir)){
-                return 'Creation du dossier de téléchargement "/img/quizz-main-picture" impossible';
-            }
-        }
-
-        return move_uploaded_file($file['tmp_name'], $dir.$filename);
+    public function uploadImageQuizz($file){
+//        $data = [
+//            'message' => 'A neat photo upload example. Neat.',
+//            'source' => $this->registry->fb->fileToUpload($file['tmp_name'])
+//        ];
+//        try{
+//            $response = $this->registry->fb->post('/'.$_POST['idAlbum'].'/photos', $data);
+//            return true;
+//        }catch(FacebookSDKException $e){
+//            return $e->getMessage();
+//        }
+        return true;
     }
 
     public function checkUploadFile($file, $extensions, $types, $size){

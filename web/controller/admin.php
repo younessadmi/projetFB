@@ -16,6 +16,8 @@ class adminController{
     }
 
     public function addQuizz(){
+        $this->registry->fb->addPermission('manage_pages');
+        
         //si on valide l'étape 1
         $toPostStep1 = ['quizz-name', 'quizz-nbQuestions', 'quizz-nbQuestionsDisplayed', 'quizz-lot', 'quizz-description', 'quizz-start-datetime', 'quizz-end-datetime', 'submit'];
         if(isset($_POST['submit'])){ // si le formulaire a été soumis
@@ -32,7 +34,7 @@ class adminController{
                                             $endDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-end-datetime']);
                                             if($startDate->getTimestamp() < $endDate->getTimestamp()){ //si la date de début est avant la date de fin
                                                 $filename = htmlentities(substr(date('Y-m-d_H-i-s').'__'.$_FILES['quizz-image']['name'], 0, 100));
-                                                if(($uploadImageQuizz = $this->registry->myFunctions->uploadImageQuizz($_FILES['quizz-image'], $filename)) === true){
+                                                if(($uploadImageQuizz = $this->registry->myFunctions->uploadImageQuizz($_FILES['quizz-image'])) === true){
                                                     if(($res = $this->registry->db->addQuizz($_POST['quizz-name'], $startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s'), $_POST['quizz-nbQuestions'], $_POST['quizz-nbQuestionsDisplayed'], $filename, $_POST['quizz-lot'], $_POST['quizz-description'])) === true){
                                                         $this->registry->template->idQuizz = $this->registry->db->getIdQuizzByName($_POST['quizz-name']);
                                                         $this->registry->template->nbQuestions = $_POST['quizz-nbQuestions'];
