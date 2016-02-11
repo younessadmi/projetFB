@@ -35,7 +35,7 @@ class fb {
             die();
         }else{
             if($this->tokenIsValid()){
-                $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);   
+                $fb->setDefaultAccessToken($_SESSION['facebook_access_token']);
             }else{
                 $loginUrl = $helper->getLoginUrl(BASE_URL.'scripts/login.php', $permissions);
                 header('Location: '.$loginUrl);
@@ -201,6 +201,31 @@ class fb {
         }
         if(!$$new_perm){
             header("Location: ".$helper->getLoginUrl(BASE_URL.'scripts/login.php', ['scope' => $new_perm]));
+        }
+    }
+
+    public function uploadImageQuizz($file, $comment){
+        $data = [
+            'message' => $comment,
+            'source' => $this->fb->fileToUpload($file['tmp_name'])
+        ];
+        
+        try{
+            $response = $this->fb->get('/'.FAN_PAGE_ID.'?fields=access_token')->getGraphUser()->AsArray();
+        }catch(Facebook\Exceptions\FacebookResponseException $e){
+            return false;
+//            return $e->getMessage();
+            exit;
+        }
+        $fan_access_token = $response['access_token'];
+        
+        try{
+            $response = $this->fb->post('/'.FAN_ALBUM_QUIZZ_ID.'/photos', $data, $fan_access_token);
+            $graphNode = $response->getGraphNode();
+            return $graphNode['post_id'];
+        }catch(FacebookSDKException $e){
+            return false;
+//            return $e->getMessage();
         }
     }
 }

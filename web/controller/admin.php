@@ -16,7 +16,8 @@ class adminController{
     }
 
     public function addQuizz(){
-        $this->registry->fb->addPermission('manage_pages');
+//        $this->registry->fb->addPermission('manage_pages');
+        $this->registry->fb->addPermission('publish_pages');
         
         //si on valide l'étape 1
         $toPostStep1 = ['quizz-name', 'quizz-nbQuestions', 'quizz-nbQuestionsDisplayed', 'quizz-lot', 'quizz-description', 'quizz-start-datetime', 'quizz-end-datetime', 'submit'];
@@ -34,14 +35,14 @@ class adminController{
                                             $endDate = DateTime::createFromFormat('d/m/Y H:i', $_POST['quizz-end-datetime']);
                                             if($startDate->getTimestamp() < $endDate->getTimestamp()){ //si la date de début est avant la date de fin
                                                 $filename = htmlentities(substr(date('Y-m-d_H-i-s').'__'.$_FILES['quizz-image']['name'], 0, 100));
-                                                if(($uploadImageQuizz = $this->registry->myFunctions->uploadImageQuizz($_FILES['quizz-image'])) === true){
-                                                    if(($res = $this->registry->db->addQuizz($_POST['quizz-name'], $startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s'), $_POST['quizz-nbQuestions'], $_POST['quizz-nbQuestionsDisplayed'], $filename, $_POST['quizz-lot'], $_POST['quizz-description'])) === true){
+                                                if(($uploadImageQuizz = $this->registry->fb->uploadImageQuizz($_FILES['quizz-image'], 'Venez découvrir le quizz : '.trim($_POST['quizz-name']).' - Disponible de '.$startDate->format('d/m/Y H:i:s').' au '.$endDate->format('d/m/Y H:i:s'))) !== false){
+                                                    if(($res = $this->registry->db->addQuizz($_POST['quizz-name'], $startDate->format('Y-m-d H:i:s'), $endDate->format('Y-m-d H:i:s'), $_POST['quizz-nbQuestions'], $_POST['quizz-nbQuestionsDisplayed'], $uploadImageQuizz, $_POST['quizz-lot'], $_POST['quizz-description'])) === true){
                                                         $this->registry->template->idQuizz = $this->registry->db->getIdQuizzByName($_POST['quizz-name']);
                                                         $this->registry->template->nbQuestions = $_POST['quizz-nbQuestions'];
                                                         $this->registry->template->show('admin/addQuizz-step2');
                                                         die();
                                                     }else $this->registry->template->error = $res;
-                                                }else $this->registry->template->error = (!$uploadImageQuizz)? 'Erreur move upload' : $uploadImageQuizz;
+                                                }else $this->registry->template->error = 'Erreur move upload';
                                             }else $this->registry->template->error = 'La date de début est après la date de fin';
                                         }else $this->registry->template->error = 'La date de fin est fausse';
                                     }else $this->registry->template->error = 'La date de début est fausse';
