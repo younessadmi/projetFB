@@ -68,3 +68,12 @@ hr.style-eight:after {
 #countdown{
     text-align:center;   
 }
+
+.fb-share-button{
+    border: solid 2px #3B5998;
+    width: 25%;
+    margin-left: 37.5%;
+    background-color: #FFF;
+    cursor: pointer;
+    border-radius: 10px;
+}
