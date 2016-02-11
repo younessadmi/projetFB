@@ -47,20 +47,6 @@ class myFunctions {
         return $age;
     }
 
-    public function uploadImageQuizz($file){
-//        $data = [
-//            'message' => 'A neat photo upload example. Neat.',
-//            'source' => $this->registry->fb->fileToUpload($file['tmp_name'])
-//        ];
-//        try{
-//            $response = $this->registry->fb->post('/'.$_POST['idAlbum'].'/photos', $data);
-//            return true;
-//        }catch(FacebookSDKException $e){
-//            return $e->getMessage();
-//        }
-        return true;
-    }
-
     public function checkUploadFile($file, $extensions, $types, $size){
         switch($file['error']){
             case UPLOAD_ERR_OK:{
