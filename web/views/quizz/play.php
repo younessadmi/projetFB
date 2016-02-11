@@ -49,7 +49,7 @@
             allowEscapeKey: false,
             html: true,
             showLoaderOnConfirm: true,
-            imageUrl: "<?php echo BASE_URL.'img/quizz-main-picture/'.htmlentities($quizz['img']); ?>"
+            imageUrl: "https://www.facebook.com/<?php echo htmlentities($quizz['img']); ?>"
         }, function(isConfirm){
             if(isConfirm){
                 //lancer le quizz

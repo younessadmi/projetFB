@@ -1,4 +1,3 @@
-<?php var_dump($_POST); ?>
 <div>
     <div class="row">
         <div class="col-md-2">
