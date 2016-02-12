@@ -69,11 +69,13 @@ hr.style-eight:after {
     text-align:center;   
 }
 
-.fb-share-button{
+.fb-share-button-style{
     border: solid 2px #3B5998;
+    color: #3B5998;
     width: 25%;
     margin-left: 37.5%;
     background-color: #FFF;
     cursor: pointer;
     border-radius: 10px;
+    text-align: center;
 }

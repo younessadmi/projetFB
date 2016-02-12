@@ -180,9 +180,7 @@ function endOfQuizz(quizz){
             data: { idQuizz: idQuizz, idFb: idFb },
             dataType: 'JSON'
         }).done(function(data, textStatus, jqXHR){
-            $("#quizz").html('<h3 style="text-align:center">Félicitations, vous avez obtenu un score de <b>'+data.message+'</b> !</h3><br>\
-                                <p style="text-align:center">N\'hésitez pas à partager votre score avec vos amis en cliquant sur le bouton ci-dessous : </p><br>');
-            $(".fb-share-button").show();
+            $("#quizz").html('<h3 style="text-align:center">Félicitations, vous avez obtenu un score de <b>'+data.message+'</b> !</h3><br><p style="text-align:center">N\'hésitez pas à partager votre score avec vos amis en cliquant sur le bouton ci-dessous : </p><br><button class="fb-share-button-style" onclick="shareFacebook();"><h2><i class="fa fa-facebook-official"></i> Partager !</h2></button>');
             NProgress.done();
         }).fail(function(jqXHR, textStatus, errorThrown){
             console.error(jqXHR);
@@ -197,4 +195,13 @@ function endOfQuizz(quizz){
 
 function getRandomArbitrary(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function shareFacebook(){
+    FB.ui({
+      method: 'share',
+      href: base_url,
+    }, function(response){
+        location.reload();
+    });
 }
