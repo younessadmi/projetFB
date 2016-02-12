@@ -43,6 +43,15 @@
         <script>
             setBaseUrl('<?php echo BASE_URL;?>');
         </script>
+        <meta property="og:url"           content="<?php echo BASE_URL;?>" />
+	    <meta property="og:type"          content="website" />
+	    <meta property="og:locale"          content="fr_FR" />
+	    
+	    <?php if(isset($quizz['name']) && isset($quizz['description']) && isset($quizz['img'])){ ?>
+            <meta property="og:title"         content="<?php echo htmlentities($quizz['name']);?>" />
+            <meta property="og:description"   content="<?php echo htmlentities($quizz['description']);?>" />
+            <meta property="og:image"         content="https://facebook.com/<?php echo htmlentities($quizz['img']); ?>" />
+	    <?php } ?>
     </head>
     <body>
         <?php if($this->registry->is_admin){?>

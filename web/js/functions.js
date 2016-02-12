@@ -1,5 +1,6 @@
 var base_url = '';
 var questionsIdUnCompleted = new Array();
+var isAnswerSet = false;
 $(document).ready(function(){
 
 });
@@ -102,7 +103,8 @@ function setQuestion(quizz){
 
 function setAnswer(quizz, countdown, idQuizz, idQuestion, idProposition, button){
     var time = 10000;
-
+    isAnswerSet = false;
+    
     if(countdown != null){
         countdown.stop();
         time = countdown.getElapsedTimeMs();
@@ -137,7 +139,7 @@ function setAnswer(quizz, countdown, idQuizz, idQuestion, idProposition, button)
         data: { idQuizz: idQuizz, idQuestion: idQuestion, idProposition: idProposition, idFb: idFb, time: time },
         dataType: 'JSON'
     }).done(function(data, textStatus, jqXHR){
-        console.info(data);
+        isAnswerSet = true;
         if(!data['success']){
             printMessage("Une erreur est survenu lors de l'enregistrement de votre réponse", "danger");
             console.error(data['message']);
@@ -160,9 +162,37 @@ function nextQuestion(quizz){
 }
 
 function endOfQuizz(quizz){
-    window.onbeforeunload = null;
-    //thibault
-    console.info('Fin du quizz');
+    NProgress.start();
+    if(isAnswerSet == true){
+        window.onbeforeunload = null;
+        console.info('Fin du quizz');
+        var idQuizz = $('[data-id-quizz]').attr('data-id-quizz');
+        var idFb = $('[data-id-fb]').attr('data-id-fb');
+        var quizzName = 
+
+        // Modification de la page
+        $('#quizz').empty();
+
+        // On récupère le score
+        $.ajax({
+            url: base_url+'ajax/getPlayerScore',
+            method: 'POST',
+            data: { idQuizz: idQuizz, idFb: idFb },
+            dataType: 'JSON'
+        }).done(function(data, textStatus, jqXHR){
+            $("#quizz").html('<h3 style="text-align:center">Félicitations, vous avez obtenu un score de <b>'+data.message+'</b> !</h3><br>\
+                                <p style="text-align:center">N\'hésitez pas à partager votre score avec vos amis en cliquant sur le bouton ci-dessous : </p><br>');
+            $(".fb-share-button").show();
+            NProgress.done();
+        }).fail(function(jqXHR, textStatus, errorThrown){
+            console.error(jqXHR);
+            NProgress.done();
+        });
+    }else{
+        setTimeout(function(){
+            endOfQuizz();
+        }, 100);   
+    }
 }
 
 function getRandomArbitrary(min, max) {

@@ -54,5 +54,20 @@ class ajaxController extends baseController {
             echo json_encode($json_data);
         }
     }
+    
+    public function getPlayerScore(){
+        if(isset($_POST['idQuizz']) && isset($_POST['idFb'])){
+            $idFb = $_POST['idFb'];
+            $idQuizz = $_POST['idQuizz'];
+            if($idPlayer = $this->registry->db->getUserIdByIdFb($idFb)){
+                if($res = $this->registry->db->getResultsByIdQuizz($idQuizz,$idPlayer)){
+                    $json_data['success'] = true;
+                    $json_data['message'] = $res[$idPlayer]['total'];
+                }else $json_data['success'] = false;
+            }else $json_data['success'] = false;
+
+            echo json_encode($json_data);
+        }
+    }
 }
 ?>
