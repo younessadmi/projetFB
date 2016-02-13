@@ -222,10 +222,21 @@ class fb {
         try{
             $response = $this->fb->post('/'.FAN_ALBUM_QUIZZ_ID.'/photos', $data, $fan_access_token);
             $graphNode = $response->getGraphNode();
-            return $graphNode['post_id'];
+            return $graphNode['id'];
         }catch(FacebookSDKException $e){
             return false;
 //            return $e->getMessage();
+        }
+    }
+    
+    public function getLinkPhoto($idPhoto){
+        try{
+            $response = $this->fb->get('/'.$idPhoto.'?fields=images')->getGraphUser()->AsArray();
+            return $response['images'][0]['source'];
+        }catch(Facebook\Exceptions\FacebookResponseException $e){
+//            return false;
+            return $e->getMessage();
+            exit;
         }
     }
 }

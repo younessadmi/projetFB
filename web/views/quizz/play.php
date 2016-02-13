@@ -65,7 +65,7 @@
             allowEscapeKey: false,
             html: true,
             showLoaderOnConfirm: true,
-            imageUrl: "https://www.facebook.com/<?php echo htmlentities($quizz['img']); ?>"
+            imageUrl: "<?php echo $this->registry->fb->getLinkPhoto(htmlentities($quizz['img'])); ?>"
         }, function(isConfirm){
             if(isConfirm){
                 //lancer le quizz

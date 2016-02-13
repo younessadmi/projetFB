@@ -50,7 +50,7 @@
 	    <?php if(isset($quizz['name']) && isset($quizz['description']) && isset($quizz['img'])){ ?>
             <meta property="og:title"         content="<?php echo htmlentities($quizz['name']);?>" />
             <meta property="og:description"   content="<?php echo htmlentities($quizz['description']);?>" />
-            <meta property="og:image"         content="https://facebook.com/<?php echo htmlentities($quizz['img']); ?>" />
+            <meta property="og:image"         content="<?php echo $this->registry->fb->getLinkPhoto(htmlentities($quizz['img'])); ?>" />
 	    <?php } ?>
     </head>
     <body>
