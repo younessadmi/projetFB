@@ -1,6 +1,16 @@
+<?php if(!empty($quizz)){ 
+    $nbQuizzEnabled = 0;
+    foreach($quizz as $quiz){
+        if($quiz['enabled']){
+            $nbQuizzEnabled++;   
+        }
+    }
+?>
+
 <div class="row">
-    <?php foreach($quizz as $quiz){?>
-    <?php if($quiz['enabled']){?>
+    <?php if($nbQuizzEnabled > 0){
+        foreach($quizz as $quiz){
+            if($quiz['enabled']){?>
     <div class="col-md-4 <?php echo (strtotime($quiz['date_end']) < time())?'quizz-disabled':'';?>" style="padding:5px; box-shadow: 1px 1px 10px rgba(183, 87, 255, 0.5); border-radius:5px">
         <div style="background:#b757ff;">
             <img src="https://www.facebook.com/<?php echo $quiz['img'];?>" alt="" style="display: block;margin-left: auto;margin-right: auto;padding-top:5px; height:100px">
@@ -35,5 +45,11 @@
         </div>
     </div>
     <?php }?>
+    <?php }?>
+    <?php }else{?>
+    <h2 style="text-align:center">Aucun quizz n'est encore disponible ! Coming soon !</h2>
+    <?php }?>
+    <?php }else{?>
+    <h2 style="text-align:center">Aucun quizz n'est encore disponible ! Coming soon !</h2>
     <?php }?>
 </div>
