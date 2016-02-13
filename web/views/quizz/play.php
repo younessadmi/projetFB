@@ -1,13 +1,22 @@
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)) return;
-    js = d.createElement(s); js.id = id;
-    js.src = "//connect.facebook.net/fr_FR/sdk.js#xfbml=1&version=v2.5&appId=<?php echo APP_ID;?>";
-    fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '<?php echo APP_ID; ?>',
+      xfbml      : true,
+      version    : '<?php echo GRAPH_VERSION; ?>'
+    });
+  };
 
-<section id="quizz" data-id-quizz="<?php echo $this->registry->router->args[0];?>">
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/fr_FR/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+  
+   <section id="quizz" data-id-quizz="<?php echo $this->registry->router->args[0];?>">
     <div data-id-fb="<?php echo $idFb;?>" style="display:none"></div>
     <div id="countdown"></div>
     <div id="number-question-status"></div>
@@ -19,8 +28,6 @@
         <li class="reponse"><button data-nb="4" data-state="false" type="button" class="btn btn-default" data-id-proposition=""></button></li>
     </ol>
 </section>
-
-<div class="fb-share-button" data-href="<?php echo BASE_URL;?>" data-layout="button"></div>
 
 <style>
     /* temporaire avant qu'Axel fasse les modif*/
