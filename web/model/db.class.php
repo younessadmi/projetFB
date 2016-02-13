@@ -253,23 +253,36 @@ class DB {
 
         $query = $this->connexion->prepare($sql);
         if($query->execute(array($idQuizz))){
-            $tab = ['id_quizz' => false];
-            while($r = $query->fetch(PDO::FETCH_ASSOC)){
-                if($tab['id_quizz'] === false){
-                    $tab['id_quizz'] = $r['id_quizz'];
-                    $tab['quizz_name'] = $r['quizz_name'];
-                    $tab['date_start'] = DateTime::createFromFormat('Y-m-d H:i:s', $r['date_start'])->format('d/m/Y H:i');
-                    $tab['date_end'] = DateTime::createFromFormat('Y-m-d H:i:s', $r['date_end'])->format('d/m/Y H:i');
-                    $tab['enabled'] = $r['enabled'];
-                    $tab['questions_nb_displayed'] = $r['questions_nb_displayed'];
-                    $tab['questions_nb_total'] = $r['questions_nb_total'];
-                    $tab['description'] = $r['description'];
-                    $tab['lot'] = $r['lot'];
+            if($query->rowCount() > 0){
+                $tab = ['id_quizz' => false];
+                while($r = $query->fetch(PDO::FETCH_ASSOC)){
+                    if($tab['id_quizz'] === false){
+                        $tab['id_quizz'] = $r['id_quizz'];
+                        $tab['quizz_name'] = $r['quizz_name'];
+                        $tab['date_start'] = DateTime::createFromFormat('Y-m-d H:i:s', $r['date_start'])->format('d/m/Y H:i');
+                        $tab['date_end'] = DateTime::createFromFormat('Y-m-d H:i:s', $r['date_end'])->format('d/m/Y H:i');
+                        $tab['enabled'] = $r['enabled'];
+                        $tab['questions_nb_displayed'] = $r['questions_nb_displayed'];
+                        $tab['questions_nb_total'] = $r['questions_nb_total'];
+                        $tab['description'] = $r['description'];
+                        $tab['lot'] = $r['lot'];
+                    }
+                    $tab['questions'][$r['id_question']]['question'] = $r['question'];
+                    $tab['questions'][$r['id_question']]['propositions'][$r['id_proposition']]['proposition'] = $r['proposition'];
+                    $tab['questions'][$r['id_question']]['propositions'][$r['id_proposition']]['is_correct'] = $r['is_correct'];
                 }
-                $tab['questions'][$r['id_question']]['question'] = $r['question'];
-                $tab['questions'][$r['id_question']]['propositions'][$r['id_proposition']]['proposition'] = $r['proposition'];
-                $tab['questions'][$r['id_question']]['propositions'][$r['id_proposition']]['is_correct'] = $r['is_correct'];
-            }
+            }elseif(is_array(($tab_tmp = $this->getInfoQuizz($idQuizz)))){
+                $tab['id_quizz'] = $tab_tmp[$idQuizz]['id'];
+                $tab['quizz_name'] = $tab_tmp[$idQuizz]['name'];
+                $tab['date_start'] = DateTime::createFromFormat('Y-m-d H:i:s', $tab_tmp[$idQuizz]['date_start'])->format('d/m/Y H:i');
+                $tab['date_end'] = DateTime::createFromFormat('Y-m-d H:i:s', $tab_tmp[$idQuizz]['date_end'])->format('d/m/Y H:i');
+                $tab['enabled'] = $tab_tmp[$idQuizz]['enabled'];
+                $tab['questions_nb_displayed'] = $tab_tmp[$idQuizz]['questions_nb_displayed'];
+                $tab['questions_nb_total'] = $tab_tmp[$idQuizz]['questions_nb_total'];
+                $tab['description'] = $tab_tmp[$idQuizz]['description'];
+                $tab['lot'] = $tab_tmp[$idQuizz]['lot'];
+            }else return 'Impossible de récupérer les informations du quizz';
+
             return $tab;
         }else return 'Erreur lors de la requête SQL ';
     }
@@ -369,7 +382,7 @@ class DB {
             }else return 'Erreur fetch db';
         }else return 'Erreur d execute db';
     }
-    
+
     public function getResultsByIdQuizz($idQuizz, $idPlayer = 'ALL'){
         $sql = 'SELECT first_name, last_name, id_player, SUM(score) AS total FROM choice 
         INNER JOIN player ON choice.id_player = player.id 

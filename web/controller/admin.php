@@ -16,7 +16,6 @@ class adminController{
     }
 
     public function addQuizz(){
-//        $this->registry->fb->addPermission('manage_pages');
         $this->registry->fb->addPermission('publish_pages');
         
         //si on valide l'étape 1

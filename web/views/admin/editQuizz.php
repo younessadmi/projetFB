@@ -85,6 +85,8 @@
     </div>
     <div>
         <h3 style="text-align:center">Questions / Réponses</h3>
+
+        <?php if(isset($quizz['questions'])){?>
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
             <?php foreach($quizz['questions'] as $id_question => $question){?>
             <div class="panel panel-default">
@@ -114,6 +116,9 @@
                 </div>
             </div>
             <?php }?>
+            <?php }else{?>
+            <p style="text-align:center">Il n'y a aucune question à ce quizz.</p>
+            <?php }?>
         </div>
     </div>
 
@@ -128,7 +133,7 @@
             $("div[data-id-question='"+$(this).attr("data-id-question")+"'] input[data-id-proposition]").each(function(){
                 idPropositions[ $(this).attr('data-id-proposition') ] = $(this).val();
             });
-            
+
             idQuestion[$(this).attr("data-id-question")] = $("div[data-id-question='"+$(this).attr("data-id-question")+"'] input[data-id-question]").val();
             updateQuestion(idQuestion, idPropositions, $(this).attr("data-id-question"));
 
