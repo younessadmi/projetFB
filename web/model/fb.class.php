@@ -252,6 +252,17 @@ class fb {
             return $e->getMessage();
             exit;
         }
-
+    }
+    
+    public function sendNotification($idQuizz){
+        /*$quizz = $this->registry->db->getInfoQuizz($idQuizz);
+        $quizzName = $quizz[$idQuizz]['name'];
+        $listUser = $this->registry->db->getResultsByIdQuizz($idQuizz);
+        foreach($listUser as $id => $val)
+        {
+            $this->fb->post('/'.$id.'/notifications?access_token='.APP_ACCESS_TOKEN.'&amp;template=Les résultats du quizz '.$quizzName.' sont arrivés !&amp;href='.BASE_URL.'results/'.$idQuizz);
+        }*/
+        
+        $this->fb->post('/me/notifications', ['access_token' => $_SESSION['facebook_access_token']], ['template' => 'Les résultats du quizz sont arrivés !'], ['href' => BASE_URL.'results/'.$idQuizz]);
     }
 }
