@@ -26,9 +26,10 @@
             
             <?php }else{?>
             
-                <a href="<?php echo BASE_URL;?>quizz/play/<?php echo $quiz['id'];?>">
+                <a href="<?php echo BASE_URL;?>quizz/results/<?php echo $quiz['id'];?>">
                     <div class="containerIn"></div>
                 </a>
+            
             <?php }?>
             
             

@@ -16,35 +16,64 @@
    }(document, 'script', 'facebook-jssdk'));
 </script>
   
-   <section id="quizz" data-id-quizz="<?php echo $this->registry->router->args[0];?>">
-    <div data-id-fb="<?php echo $idFb;?>" style="display:none"></div>
-    <div id="countdown"></div>
-    <div id="number-question-status"></div>
-    <div id="question" data-id-question=""></div>
-    <ol id="reponses">
-        <li class="reponse"><button data-nb="1" data-state="false" type="button" class="btn btn-default" data-id-proposition=""></button></li>
-        <li class="reponse"><button data-nb="2" data-state="false" type="button" class="btn btn-default" data-id-proposition=""></button></li>
-        <li class="reponse"><button data-nb="3" data-state="false" type="button" class="btn btn-default" data-id-proposition=""></button></li>
-        <li class="reponse"><button data-nb="4" data-state="false" type="button" class="btn btn-default" data-id-proposition=""></button></li>
-    </ol>
-</section>
+<div class="col-md-8 col-md-offset-2" style="background:rgba(248, 248, 248, 0.37); border-radius:5px; border:solid 1px #eee;">
+    <section id="quizz" data-id-quizz="<?php echo $this->registry->router->args[0];?>">
+        <div data-id-fb="<?php echo $idFb;?>" style="display:none"></div>
+        <div class="row" style="margin-bottom:30px;">
+            <div class="col-md-12">
+                <div id="number-question-status" style="float:right"></div>
+                <div class="col-md-3">
+                    <div><div id="countdown" style="text-align:center"></div></div>
+                </div>
+                <div class="col-md-9">
+                    <div id="question" class="col-md-12" data-id-question=""></div>
+                </div>
+            </div>
+        </div>
+        <div id="row">
+            <div class="text-center col-lg-6">
+                <div class="classWithPad">
+                    <button data-nb="1" data-state="false" type="button" class="btn btn-default reponse btn-lg" data-id-proposition=""></button>
+                </div>
+            </div>
+            <div class="text-center col-lg-6">
+                <div class="classWithPad">
+                    <button data-nb="2" data-state="false" type="button"class="btn btn-default reponse btn-lg" data-id-proposition=""></button>
+                </div>
+            </div>
+                
+            <div class="text-center col-lg-6">
+                <div class="classWithPad">
+                    <button data-nb="3" data-state="false" type="button" class="btn btn-default reponse btn-lg" data-id-proposition=""></button>
+                </div>
+            </div>
+            <div class="text-center col-lg-6">
+                <div class="classWithPad">        
+                    <button data-nb="4" data-state="false" type="button"class="btn btn-default reponse btn-lg" data-id-proposition=""></button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</div>
 
 <style>
     /* temporaire avant qu'Axel fasse les modif*/
     section#quizz{
-        background-color: #eee;
-        width: 60%;
-        margin-left: 20%;
-        margin-right: 20%;
         padding: 10px;
         display: none;
     }
     div#question{
-        text-align: center;
         font-weight: bold;
+    }
+    div#number-question-status{
         margin-bottom:30px;
+        font-weight: bold;
     }
     ol#reponses li.reponse button{
+        width:100%;
+    }  
+    button.reponse { 
         width:100%;
     }
 </style>

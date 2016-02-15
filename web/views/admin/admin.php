@@ -50,7 +50,7 @@
                         <i class="fa fa-4x fa-users"></i>
                       </p>
                       <p class="text-center">
-                       Gestion quizz
+                       Gestion utilisateur
                       </p>
                     </div>
                   </div>

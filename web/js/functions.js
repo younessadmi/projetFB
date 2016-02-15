@@ -78,8 +78,8 @@ function setQuestion(quizz){
     }
     //initialisation du countdown
     var countdown = $("#countdown").countdown360({
-        radius: 60,
-        seconds: 5,
+        radius: 50,
+        seconds: 10,
         label: false,
         fontColor: '#FFFFFF',
         autostart: false,
