@@ -4,8 +4,8 @@
 <div class="col-md-12">
     
     <?php if(count($players) > 0){?>
-    <div class="table-responsive" style="overflow-x:initial">
-        <table class="table table-bordered table-valign table-condensed table-striped highlight" id="listUser">
+    <div class="table-responsive">
+        <table class="table table-bordered nowrap table-valign table-condensed table-striped highlight" id="listUser">
             <thead>
                 <tr class="text-uppercase odd gradeX" name="no-hover">
                     <th>Type</th>
