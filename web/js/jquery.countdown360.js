@@ -7,6 +7,9 @@
  *  Under MIT License
  */
 ;(function ($, window, document, undefined) {
+    
+    var fillStyleInitial = "#8ac575";
+    var strokeStyleInitial = "#477050";    
     var pluginName = "countdown360",
         defaults = {
             radius: 15.5,                    // radius of arc
@@ -69,7 +72,10 @@
             }
         },
 
-        start: function () {
+        start: function () { 
+            this.settings.strokeStyle = strokeStyleInitial;
+            this.pen.strokeStyle = this.settings.strokeStyle;
+            this.settings.fillStyle = fillStyleInitial;;   
             this.startedAt = new Date();
             this._drawCountdownShape(Math.PI*3.5, true);
             this._drawCountdownLabel(0);
