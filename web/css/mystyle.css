@@ -66,7 +66,7 @@ hr.style-eight:after {
 }
 
 #countdown{
-    text-align:center;   
+    
 }
 
 .fb-share-button-style{
@@ -151,3 +151,6 @@ div.dataTables_length select {
     margin-right: 5px;
 }
 
+.classWithPad { 
+    margin:10px; padding:10px; 
+}

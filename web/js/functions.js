@@ -78,7 +78,7 @@ function setQuestion(quizz){
     }
     //initialisation du countdown
     var countdown = $("#countdown").countdown360({
-        radius: 60,
+        radius: 50,
         seconds: 5,
         label: false,
         fontColor: '#FFFFFF',
