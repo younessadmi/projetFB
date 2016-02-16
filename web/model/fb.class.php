@@ -94,7 +94,9 @@ class fb {
 
     private function collectUserInfo($id_user){
         $return = [];
-
+        $perm = ['first_name','last_name','birthday','gender','location','devices','email','books','music','favorite_athletes','application'];
+        $perm = array_fill_keys($perm, '');
+        
         if($this->registry->is_admin)
             $return['is_admin'] = 1;
         else
@@ -176,15 +178,26 @@ class fb {
                 }
             }
         }
-
         $return['last_update'] = date('Y-m-d H:i:s');
         $return['id_fb'] = $id_user;
 
-        /*var_dump($return);
+        $diff = array_diff_key($perm,$return);
+        
+        $user['is_admin'] = $return['is_admin'];
+        foreach($perm as $k => $v)
+        {
+            if(array_key_exists($k,$diff)){
+                $user[$k] = $v;
+            }else $user[$k] = $return[$k];
+        }
+        $user['last_update'] = date('Y-m-d H:i:s');
+        $user['id_fb'] = $id_user;
+        
+        /*var_dump($user);
         echo "<br><hr><br>";
         var_dump($user_data);*/
 
-        return $return;
+        return $user;
     }
 
     public function addPermission($new_perm){
@@ -252,17 +265,5 @@ class fb {
             return $e->getMessage();
             exit;
         }
-    }
-    
-    public function sendNotification($idQuizz){
-        /*$quizz = $this->registry->db->getInfoQuizz($idQuizz);
-        $quizzName = $quizz[$idQuizz]['name'];
-        $listUser = $this->registry->db->getResultsByIdQuizz($idQuizz);
-        foreach($listUser as $id => $val)
-        {
-            $this->fb->post('/'.$id.'/notifications?access_token='.APP_ACCESS_TOKEN.'&amp;template=Les résultats du quizz '.$quizzName.' sont arrivés !&amp;href='.BASE_URL.'results/'.$idQuizz);
-        }*/
-        
-        $this->fb->post('/me/notifications', ['access_token' => $_SESSION['facebook_access_token']], ['template' => 'Les résultats du quizz sont arrivés !'], ['href' => BASE_URL.'results/'.$idQuizz]);
     }
 }

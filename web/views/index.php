@@ -50,6 +50,3 @@
     <h2 style="text-align:center">Aucun quizz n'est encore disponible ! Coming soon !</h2>
     <?php }?>
 </div>
-
-
-<?php print_r($this->registry->fb->sendNotification(1)); ?>
