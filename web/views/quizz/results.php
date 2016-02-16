@@ -23,45 +23,54 @@ if(strtotime($quizz['date_end']) < time()){ ?>
         </thead>
         <tbody>
             <?php
-                                           $i = 1;
-                                           $topten = $results;
-                                           if(count($topten)>10)
-                                               $topten = array_slice($topten,0,10);
-                                           foreach($topten as $p){
-                                               echo '
-        <tr'.(($p['id_player'] == $idPlayer)? ' class="you"' : '' ).'>
-            <td'.(($i == 1)? ' id="first"' : '' ).'>'.$i.'</td>
-            <td>'.$p['first_name'].' '.$p['last_name'].'</td>
-            <td>'.$p['total'].'</td>
-        </tr>
-   ';
-                                               $i++;
-                                           }
-                                           if(!array_key_exists($idPlayer,$topten) && !empty($myresults)){
-                                               $results = array_values($results);
-                                               $player = array_search($idPlayer,$results);
-                                               echo '
-        <tr><td colspan="3">...</td></tr>
-        <tr class="you">
-            <td>'.($player++).'</td>
-            <td>'.$results[$player]['first_name'].' '.$results[$player]['last_name'].'</td>
-            <td>'.$results[$player]['total'].'</td>
-        </tr>
-    ';
+                                           if(count($results)>0){
+                                               $i = 1;
+                                               $topten = $results;
+                                               if(count($topten)>10){
+                                                   $topten = array_slice($topten,0,10);
+                                               }
+                                               foreach($topten as $p){
+                                                   echo '
+                                                    <tr'.(($p['id_player'] == $idPlayer)? ' class="you"' : '' ).'>
+                                                        <td'.(($i == 1)? ' id="first"' : '' ).'>'.$i.' '.(($i == 1)? '<i class="fa fa-trophy"></i> ': '').'</td>
+                                                        <td>'.$p['first_name'].' '.$p['last_name'].'</td>
+                                                        <td>'.$p['total'].'</td>
+                                                    </tr>
+                                               ';
+                                                   $i++;
+                                               }
+                                               if(!array_key_exists($idPlayer,$topten) && !empty($myresults)){
+                                                   $results = array_values($results);
+                                                   $player = array_search($idPlayer,$results);
+                                                   echo '
+                                                <tr><td colspan="3">...</td></tr>
+                                                <tr class="you">
+                                                    <td><i class="fa fa-trophy fa-2x"></i> '.($player++).'</td>
+                                                    <td>'.$results[$player]['first_name'].' '.$results[$player]['last_name'].'</td>
+                                                    <td>'.$results[$player]['total'].'</td>
+                                                </tr>
+                                            ';
+                                               }
+                                           }else{
+                                               echo '<tr><td colspan="3" style="text-align:center;font-style:italic">Aucun participant</td></tr>';   
                                            }
             ?>
         </tbody>
     </table>
 </div>
 <style>
+    @keyframes blink { 
+        50% {
+            border: groove 2px #ff0000;
+        } 
+    }
     .you{
-        background-color: chartreuse;
+        /*        color: #009dff;*/
+        animation: blink .5s step-end infinite alternate;
+        -webkit-animation: blink .5s step-end infinite alternate;
     }
     #first, #first + td, #first +td + td{
-        color: crimson;
-    }
-    #first:after{
-        content: "★";
+        color: #FFD700;
     }
 </style>
 <?php }else{ ?>
