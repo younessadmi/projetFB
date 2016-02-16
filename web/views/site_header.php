@@ -35,6 +35,8 @@
         <script src='<?php echo BASE_URL;?>js/buttons.html5.min.js'></script>
         <script src='<?php echo BASE_URL;?>js/buttons.colVis.min.js'></script>
         <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/buttons.dataTables.min.css'>
+        
+        <link rel="stylesheet" type="text/css" href='<?php echo BASE_URL;?>css/bootstrap-social.css'>
 
         <script src='<?php echo BASE_URL;?>js/jquery.countdown360.js'></script>
 
