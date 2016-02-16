@@ -33,7 +33,7 @@ if(strtotime($quizz['date_end']) < time()){ ?>
                                                    echo '
                                                     <tr'.(($p['id_player'] == $idPlayer)? ' class="you"' : '' ).'>
                                                         <td'.(($i == 1)? ' id="first"' : '' ).'>'.$i.' '.(($i == 1)? '<i class="fa fa-trophy"></i> ': '').'</td>
-                                                        <td>'.$p['first_name'].' '.$p['last_name'].'</td>
+                                                        <td><img src="'.$this->registry->fb->getProfilePicture($p['id_player']).'" alt="" class="img-circle"> '.$p['first_name'].' '.$p['last_name'].'</td>
                                                         <td>'.$p['total'].'</td>
                                                     </tr>
                                                ';
@@ -45,8 +45,8 @@ if(strtotime($quizz['date_end']) < time()){ ?>
                                                    echo '
                                                 <tr><td colspan="3">...</td></tr>
                                                 <tr class="you">
-                                                    <td><i class="fa fa-trophy fa-2x"></i> '.($player++).'</td>
-                                                    <td>'.$results[$player]['first_name'].' '.$results[$player]['last_name'].'</td>
+                                                    <td>'.($player++).'</td>
+                                                    <td><img src="'.$this->registry->fb->getProfilePicture($p['id_player']).'" alt="" class="img-circle"> '.$results[$player]['first_name'].' '.$results[$player]['last_name'].'</td>
                                                     <td>'.$results[$player]['total'].'</td>
                                                 </tr>
                                             ';
@@ -61,11 +61,10 @@ if(strtotime($quizz['date_end']) < time()){ ?>
 <style>
     @keyframes blink { 
         50% {
-            border: groove 2px #ff0000;
-        } 
+            color: #b757ff;
+        }
     }
     .you{
-        /*        color: #009dff;*/
         animation: blink .5s step-end infinite alternate;
         -webkit-animation: blink .5s step-end infinite alternate;
     }

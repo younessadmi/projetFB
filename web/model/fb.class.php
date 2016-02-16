@@ -209,34 +209,49 @@ class fb {
             'message' => $comment,
             'source' => $this->fb->fileToUpload($file['tmp_name'])
         ];
-        
+
         try{
             $response = $this->fb->get('/'.FAN_PAGE_ID.'?fields=access_token')->getGraphUser()->AsArray();
         }catch(Facebook\Exceptions\FacebookResponseException $e){
             return false;
-//            return $e->getMessage();
+            //            return $e->getMessage();
             exit;
         }
         $fan_access_token = $response['access_token'];
-        
+
         try{
             $response = $this->fb->post('/'.FAN_ALBUM_QUIZZ_ID.'/photos', $data, $fan_access_token);
             $graphNode = $response->getGraphNode();
             return $graphNode['id'];
         }catch(FacebookSDKException $e){
             return false;
-//            return $e->getMessage();
+            //            return $e->getMessage();
         }
     }
-    
+
     public function getLinkPhoto($idPhoto){
         try{
             $response = $this->fb->get('/'.$idPhoto.'?fields=images')->getGraphUser()->AsArray();
             return $response['images'][0]['source'];
         }catch(Facebook\Exceptions\FacebookResponseException $e){
-//            return false;
+            //            return false;
             return $e->getMessage();
             exit;
         }
+    }
+
+    public function getProfilePicture($idPlayer){
+        
+        $idFb = $this->registry->db->getIdFbByUserId($idPlayer);
+        
+        try{
+            $response = $this->fb->get('/'.$idFb.'?fields=picture')->getGraphUser()->AsArray();
+            return $response['picture']['url'];
+        }catch(Facebook\Exceptions\FacebookResponseException $e){
+            //            return false;
+            return $e->getMessage();
+            exit;
+        }
+
     }
 }
