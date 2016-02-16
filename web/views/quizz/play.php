@@ -76,16 +76,33 @@
     button.reponse { 
         width:100%;
     }
+    
+    button.cancel { 
+        padding-left:5px;
+        padding-right:5px;
+    }
+    
+    button.confirm { 
+        padding-left:5px;
+        padding-right:5px;
+    }
+    
+    .sweet-alert { 
+        padding-top:0;
+        margin-top:0px !important;
+        top:10% !important;
+        overflow-y:scroll
+    }
 </style>
 <script>
     $(document).ready(function(){
         //Si le quizz n'a jamais été fait
         var quizz = undefined;
-        var welcome_message = "<p>Bienvenue sur le quizz <b><?php echo htmlentities($quizz['name']);?></b> !</p><p>Répondez correctement aux <b><?php echo htmlentities($quizz['questions_nb_displayed']);?></b> questions en un minimum de temps pour tenter de remporter <b>\"<?php echo htmlentities($quizz['lot']);?>\"</b> !</p><p>Bonne chance, et que le meilleur gagne !</p>";
-        var availability = "<i class='fa fa-calendar'></i> <b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_start'])->format('d/m/Y H:i:s');?></b> <i class='fa fa-chevron-right'></i> <b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_end'])->format('d/m/Y H:i:s');?></b>";
+        var welcome_message = "<p>Répondez correctement aux <b><?php echo htmlentities($quizz['questions_nb_displayed']);?></b> questions en un minimum de temps pour tenter de remporter <br><b>\"<?php echo htmlentities($quizz['lot']);?>\"</b> !</p><p>Bonne chance, et que le meilleur gagne !</p>";
+        var availability = "<div class='col-md-12'></div> <div class='col-md-5'><b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_start'])->format('d/m/Y H:i:s');?></b></div><div class='col-md-2'><i class='fa fa-calendar'></i></div><div class='col-md-5'><b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_end'])->format('d/m/Y H:i:s');?></b></div>";
         swal({
-            title: "<?php echo htmlentities($quizz['name']);?>",
-            text: "<div><p><?php echo htmlentities($quizz['description']);?></p><br><p>"+welcome_message+"</p><br><p></p><p style='font-style:italic;font-size:14px'>"+availability+"</p></div>",
+            title: "",
+            text: "<div class='col-md-12'><b><?php echo htmlentities($quizz['name']);?></b><hr><div class='row' style='font-style:italic;font-size:14px'>"+availability+"</div><hr><?php echo htmlentities($quizz['description']);?><br><p>"+welcome_message+"</p><br><p></p></div>",
             showCancelButton: true,
             confirmButtonText: "Charger le quizz",
             cancelButtonText: "Retour",
@@ -93,8 +110,7 @@
             closeOnCancel: false,
             allowEscapeKey: false,
             html: true,
-            showLoaderOnConfirm: true,
-            imageUrl: "<?php echo $this->registry->fb->getLinkPhoto(htmlentities($quizz['img'])); ?>"
+            showLoaderOnConfirm: true
         }, function(isConfirm){
             if(isConfirm){
                 //lancer le quizz
