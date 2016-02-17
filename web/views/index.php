@@ -52,4 +52,4 @@
 </div>
 
 
-<?php print_r($this->registry->fb->sendNotification(1)); ?>
+<?php //print_r($this->registry->fb->sendNotification(1)); ?>
