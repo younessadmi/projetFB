@@ -184,7 +184,7 @@ class fb {
         $return['last_update'] = date('Y-m-d H:i:s');
         $return['id_fb'] = $id_user;
         
-        $diff = array_diff_key($perm,$return)
+        $diff = array_diff_key($perm,$return);
         
         $user['is_admin'] = $return['is_admin'];
         foreach($perm as $k => $v)
@@ -193,8 +193,8 @@ class fb {
                 $user[$k] = $return[$k];
             }else $user[$k] = '';
         }
-        $user['last_update'] = $return['last_update']
-        $user['id_fb'] = $return['id_fb']
+        $user['last_update'] = $return['last_update'];
+        $user['id_fb'] = $return['id_fb'];
 
         /*var_dump($return);
         echo "<br><hr><br>";
