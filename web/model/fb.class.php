@@ -189,9 +189,9 @@ class fb {
         $user['is_admin'] = $return['is_admin'];
         foreach($perm as $k => $v)
         {
-            if(array_key_exists($k,$return)){
-                $user[$k] = $return[$k];
-            }else $user[$k] = '';
+            if(array_key_exists($k,$diff)){
+                $user[$k] = '';
+            }else $user[$k] = $return[$k];
         }
         $user['last_update'] = $return['last_update'];
         $user['id_fb'] = $return['id_fb'];
