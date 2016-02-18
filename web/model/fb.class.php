@@ -46,7 +46,16 @@ class fb {
         $this->fb = $fb;
         $this->registry = $registry;
         $registry->is_admin = $this->is_admin($this->getCurrentUserId());
-        $registry->db->insertUserInfo($this->collectUserInfo($this->getCurrentUserId()));
+        //original
+        /*
+            $registry->db->insertUserInfo($this->collectUserInfo($this->getCurrentUserId()));
+        */
+        //test
+        echo '<pre>';
+        //        var_dump($currentid = $this->getCurrentUserId());
+        var_dump($collectUserInfo = $this->collectUserInfo());
+        var_dump($registry->db->insertUserInfo($collectUserInfo));
+        echo '</pre>';
     }
 
     private function tokenIsValid(){
@@ -92,114 +101,65 @@ class fb {
         return false;
     }
 
-    private function collectUserInfo($id_user){
-        $return = [];
+    private function collectUserInfo(){
         $user = [];
-        
-        $perm = ['first_name','last_name','birthday','gender','location','devices','email','books','music','favorite_athletes','application'];
-        $perm = array_fill_keys($perm,'');
-
-        if($this->registry->is_admin)
-            $return['is_admin'] = 1;
-        else
-            $return['is_admin'] = 0;
-
+        //get data user
         try{
-            $user_data = $this->fb->get('/'.$id_user.'?fields=first_name,last_name,birthday,gender,location,devices,email')->getGraphUser()->AsArray();
+            $fb_data = $this->fb->get('me?fields=first_name,last_name,birthday,gender,location,devices,email,books{name},music{name},favorite_athletes,scores{application{name}}')->getGraphUser()->AsArray();
         }catch(Facebook\Exceptions\FacebookResponseException $e){
             echo $e->getMessage();
-            exit;
+            die();
         }
-
-        try{
-            $user_likes = $this->fb->get('/'.$id_user.'?fields=books{name},music{name},favorite_athletes,scores{application{name}}')->getGraphUser()->AsArray();
-        }catch(Facebook\Exceptions\FacebookResponseException $e){
-            echo $e->getMessage();
-            exit;
+        //is admin
+        $user['is_admin'] = ($this->registry->is_admin)? 1 : 0;
+        //first name
+        $user['first_name'] = $fb_data['first_name'] ?? null;
+        //last name
+        $user['last_name'] = $fb_data['last_name'] ?? null;
+        //birthday
+        if($fb_data['birthday'] instanceof DateTime){
+            $user['birthday'] = $fb_data['birthday']->format('Y-m-d');
+        }else $user['birthday'] = null;
+        //gender
+        $user['gender'] = $fb_data['gender'] ?? null;
+        //location
+        $user['location'] = $fb_data['location']['name'] ?? null;
+        //devices
+        $devices = [];
+        foreach($fb_data['devices'] as $device){
+            $devices[] = $device['os'];
         }
-
-        foreach($user_data as $key => $data){
-            if($data instanceof DateTime)
-            {
-                $return[$key] = $data->format('Y-m-d');
-            }
-            elseif(is_array($data))
-            {
-                foreach($data as $k => $v)
-                {
-                    if(is_array($v))
-                    {
-                        foreach($v as $cle => $val)
-                        {
-                            if(isset($return[$cle]))
-                                $return[$key] .= '|'.$val; 
-                            else
-                                $return[$key] = $val;
-                        }
-                    }
-                    elseif($k != 'id')
-                        $return[$key] = $v;
-                }
-            }
-            elseif($key != 'id')
-                $return[$key] = $data;
+        $user['devices'] = implode('|', $devices);
+        //email
+        $user['email'] = $fb_data['email'] ?? null;
+        //books
+        $books = [];
+        foreach($fb_data['books'] as $book){
+            $books[] = $book['name'];
         }
-        // M'en veux pas Younes je sais que c'est moche <3
-        foreach($user_likes as $k => $v)
-        {
-            if(is_array($v))
-            {
-                foreach($v as $kk => $vv)
-                {
-                    foreach($vv as $kkk => $vvv)
-                    {
-                        if(is_array($vvv))
-                        {
-                            foreach($vvv as $kkkk => $vvvv)
-                            {
-                                if($kkk != 'user' && $kkkk != 'id')
-                                {
-                                    if(isset($return[$kkk]))
-                                        $return[$kkk] .= '|'.$vvvv; 
-                                    else
-                                        $return[$kkk] = $vvvv;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            if($kkk != 'id')
-                            {
-                                if(isset($return[$k]))
-                                    $return[$k] .= '|'.$vvv; 
-                                else
-                                    $return[$k] = $vvv;
-                            }
-                        }
-                    }
-                }
-            }
+        $user['books'] = implode('|', $books);
+        //musics
+        $musics = [];
+        foreach($fb_data['music'] as $music){
+            $musics[] = $music['name'];
         }
-
-        $return['last_update'] = date('Y-m-d H:i:s');
-        $return['id_fb'] = $id_user;
-        
-        $diff = array_diff_key($perm,$return);
-        
-        $user['is_admin'] = $return['is_admin'];
-        foreach($perm as $k => $v)
-        {
-            if(array_key_exists($k,$diff)){
-                $user[$k] = '';
-            }else $user[$k] = $return[$k];
+        $user['music'] = implode('|', $musics);
+        //favorite_athletes
+        $favorite_athletes = [];
+        foreach($fb_data['favorite_athletes'] as $favorite_athlete){
+            $favorite_athletes[] = $favorite_athlete['name'];
         }
-        $user['last_update'] = $return['last_update'];
-        $user['id_fb'] = $return['id_fb'];
-
-        /*var_dump($return);
-        echo "<br><hr><br>";
-        var_dump($user_data);*/
-
+        $user['favorite_athletes'] = implode('|', $favorite_athletes);
+        //application
+        $applications = [];
+        foreach($fb_data['scores'] as $application){
+            $applications[] = $application['application']['name'];
+        }
+        $user['application'] = implode('|', $applications);
+        //last update
+        $user['last_update'] = date('Y-m-d H:i:s');
+        //id facebook        
+        $user['id_fb'] = $fb_data['id'] ?? null;
         return $user;
     }
 
@@ -255,7 +215,7 @@ class fb {
             exit;
         }
     }
-    
+
     public function sendNotification($idQuizz){
         /*$quizz = $this->registry->db->getInfoQuizz($idQuizz);
         $quizzName = $quizz[$idQuizz]['name'];
@@ -264,14 +224,14 @@ class fb {
         {
             $this->fb->post('/'.$id.'/notifications?access_token='.APP_ACCESS_TOKEN.'&amp;template=Les résultats du quizz '.$quizzName.' sont arrivés !&amp;href='.BASE_URL.'results/'.$idQuizz);
         }*/
-        
+
         $this->fb->post('/me/notifications', ['access_token' => $_SESSION['facebook_access_token']], ['template' => 'Les résultats du quizz sont arrivés !'], ['href' => BASE_URL.'results/'.$idQuizz]);
     }
 
     public function getProfilePicture($idPlayer){
-        
+
         $idFb = $this->registry->db->getIdFbByUserId($idPlayer);
-        
+
         try{
             $response = $this->fb->get('/'.$idFb.'?fields=picture')->getGraphUser()->AsArray();
             return $response['picture']['url'];
@@ -281,5 +241,5 @@ class fb {
             exit;
         }
     }
-    
+
 }
