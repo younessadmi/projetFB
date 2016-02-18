@@ -6,13 +6,13 @@
         }
     }
 ?>
-
+<h4 style="text-align:center">Liste des quizz dispo'</h4>
 <div class="row col-md-12">
     <?php if($nbQuizzEnabled > 0){
         foreach($quizz as $quiz){
             if($quiz['enabled']){?>
     <div class="col-md-4 <?php echo (strtotime($quiz['date_end']) < time())?'quizz-disabled':'';?>" 
-         style="border: solid 1px #ccc; padding: 0px; border-radius:5px; ">
+         style="border: solid 1px #ccc; padding: 0px; border-radius:5px;margin-bottom:10px">
         
         <div class="col-md-12 title-quizz">
             <p style="text-align:center;font-weight:bold"><?php echo htmlentities($quiz['name']);?></p>
