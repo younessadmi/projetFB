@@ -117,45 +117,57 @@ class fb {
         //last name
         $user['last_name'] = $fb_data['last_name'] ?? null;
         //birthday
-        if($fb_data['birthday'] instanceof DateTime){
-            $user['birthday'] = $fb_data['birthday']->format('Y-m-d');
+        if(isset($fb_data['birthday'])){
+            if($fb_data['birthday'] instanceof DateTime){
+                $user['birthday'] = $fb_data['birthday']->format('Y-m-d');
+            }else $user['birthday'] = null;
         }else $user['birthday'] = null;
         //gender
         $user['gender'] = $fb_data['gender'] ?? null;
         //location
         $user['location'] = $fb_data['location']['name'] ?? null;
         //devices
-        $devices = [];
-        foreach($fb_data['devices'] as $device){
-            $devices[] = $device['os'];
-        }
-        $user['devices'] = implode('|', $devices);
+        if(isset($fb_data['devices'])){
+            $devices = [];
+            foreach($fb_data['devices'] as $device){
+                $devices[] = $device['os'];
+            }
+            $user['devices'] = implode('|', $devices);
+        }else $user['devices'] = null;
         //email
         $user['email'] = $fb_data['email'] ?? null;
         //books
-        $books = [];
-        foreach($fb_data['books'] as $book){
-            $books[] = $book['name'];
-        }
-        $user['books'] = implode('|', $books);
+        if(isset($user['books'])){
+            $books = [];
+            foreach($fb_data['books'] as $book){
+                $books[] = $book['name'];
+            }
+            $user['books'] = implode('|', $books);
+        }else $user['books'] = null;
         //musics
-        $musics = [];
-        foreach($fb_data['music'] as $music){
-            $musics[] = $music['name'];
-        }
-        $user['music'] = implode('|', $musics);
+        if(isset($user['music'])){
+            $musics = [];
+            foreach($fb_data['music'] as $music){
+                $musics[] = $music['name'];
+            }
+            $user['music'] = implode('|', $musics);
+        }else $user['music'] = null;
         //favorite_athletes
-        $favorite_athletes = [];
-        foreach($fb_data['favorite_athletes'] as $favorite_athlete){
-            $favorite_athletes[] = $favorite_athlete['name'];
-        }
-        $user['favorite_athletes'] = implode('|', $favorite_athletes);
+        if(isset($user['favorite_athletes'])){
+            $favorite_athletes = [];
+            foreach($fb_data['favorite_athletes'] as $favorite_athlete){
+                $favorite_athletes[] = $favorite_athlete['name'];
+            }
+            $user['favorite_athletes'] = implode('|', $favorite_athletes);
+        }else $user['favorite_athletes'] = null;
         //application
-        $applications = [];
-        foreach($fb_data['scores'] as $application){
-            $applications[] = $application['application']['name'];
-        }
-        $user['application'] = implode('|', $applications);
+        if(isset($user['application'])){
+            $applications = [];
+            foreach($fb_data['scores'] as $application){
+                $applications[] = $application['application']['name'];
+            }
+            $user['application'] = implode('|', $applications);
+        }else $user['application'] = null;
         //last update
         $user['last_update'] = date('Y-m-d H:i:s');
         //id facebook        
