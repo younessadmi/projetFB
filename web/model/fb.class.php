@@ -46,7 +46,16 @@ class fb {
         $this->fb = $fb;
         $this->registry = $registry;
         $registry->is_admin = $this->is_admin($this->getCurrentUserId());
-        $registry->db->insertUserInfo($this->collectUserInfo());
+        //original
+        /*
+            $registry->db->insertUserInfo($this->collectUserInfo($this->getCurrentUserId()));
+        */
+        //test
+        echo '<pre>';
+        //        var_dump($currentid = $this->getCurrentUserId());
+        var_dump($collectUserInfo = $this->collectUserInfo());
+        var_dump($registry->db->insertUserInfo($collectUserInfo));
+        echo '</pre>';
     }
 
     private function tokenIsValid(){
@@ -96,7 +105,7 @@ class fb {
         $user = [];
         //get data user
         try{
-            $fb_data = $this->fb->get('me?fields=first_name,last_name,birthday,gender,location,devices,email,books{name},music{name},favorite_athletes,scores{application{name}}')->getGraphUser()->AsArray();
+            $fb_data = $this->fb->get('/me?fields=first_name,last_name,birthday,gender,location,devices,email,books{name},music{name},favorite_athletes,scores{application{name}}')->getGraphUser()->AsArray();
         }catch(Facebook\Exceptions\FacebookResponseException $e){
             echo $e->getMessage();
             die();
@@ -128,7 +137,7 @@ class fb {
         //email
         $user['email'] = $fb_data['email'] ?? null;
         //books
-        if(isset($user['books'])){
+        if(isset($fb_data['books'])){
             $books = [];
             foreach($fb_data['books'] as $book){
                 $books[] = $book['name'];
@@ -136,7 +145,7 @@ class fb {
             $user['books'] = implode('|', $books);
         }else $user['books'] = null;
         //musics
-        if(isset($user['music'])){
+        if(isset($fb_data['music'])){
             $musics = [];
             foreach($fb_data['music'] as $music){
                 $musics[] = $music['name'];
@@ -144,7 +153,7 @@ class fb {
             $user['music'] = implode('|', $musics);
         }else $user['music'] = null;
         //favorite_athletes
-        if(isset($user['favorite_athletes'])){
+        if(isset($fb_data['favorite_athletes'])){
             $favorite_athletes = [];
             foreach($fb_data['favorite_athletes'] as $favorite_athlete){
                 $favorite_athletes[] = $favorite_athlete['name'];
@@ -152,7 +161,7 @@ class fb {
             $user['favorite_athletes'] = implode('|', $favorite_athletes);
         }else $user['favorite_athletes'] = null;
         //application
-        if(isset($user['application'])){
+        if(isset($fb_data['scores'])){
             $applications = [];
             foreach($fb_data['scores'] as $application){
                 $applications[] = $application['application']['name'];
@@ -163,6 +172,7 @@ class fb {
         $user['last_update'] = date('Y-m-d H:i:s');
         //id facebook        
         $user['id_fb'] = $fb_data['id'] ?? null;
+        
         return $user;
     }
 
