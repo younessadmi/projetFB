@@ -46,7 +46,16 @@ class fb {
         $this->fb = $fb;
         $this->registry = $registry;
         $registry->is_admin = $this->is_admin($this->getCurrentUserId());
+        // original
+        /*
         $registry->db->insertUserInfo($this->collectUserInfo($this->getCurrentUserId()));
+        */
+        //test
+        echo '<pre>';
+        var_dump($currentid = $this->getCurrentUserId());
+        var_dump($collectUserInfo = $this->collectUserInfo($currentid));
+        var_dump($registry->db->insertUserInfo($collectUserInfo));
+        echo '</pre>';
     }
 
     private function tokenIsValid(){
