@@ -189,18 +189,15 @@ class DB {
         if($isset == 0){
             // Insert
             $req = $this->connexion->prepare('INSERT INTO player(is_admin, first_name, last_name, birthday, gender, location, devices, email, books, music, favorite_athletes, application, last_update, id_fb) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)');
-        }
-        elseif($isset == 1){
+        }elseif($isset == 1){
             // Update
             $req = $this->connexion->prepare('UPDATE player SET is_admin=?, first_name=?, last_name=?, birthday=?, gender=?, location=?, devices=?, email=?, books=?, music=?, favorite_athletes=?, application=?, last_update=? WHERE id_fb=?');
-        }
-        else{
-            return 'error while checking existing user';
-        }
+        }else return 'error while checking existing user';
+        
         // Execute
         if($req->execute(array_values($data)))
             return true;
-        return 'error while fetching user info';
+        return 'error while fetching user info: '.$this->getLastError();
     }
 
     public function getInfoQuizz($idQuizz = 'ALL'){
