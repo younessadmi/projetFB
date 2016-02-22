@@ -1,21 +1,20 @@
 <script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '<?php echo APP_ID; ?>',
-      xfbml      : true,
-      version    : '<?php echo GRAPH_VERSION; ?>'
-    });
-  };
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '<?php echo APP_ID; ?>',
+            xfbml      : true,
+            version    : '<?php echo GRAPH_VERSION; ?>'
+        });
+    };
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/fr_FR/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/fr_FR/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 </script>
-  
 <div class="col-md-8 col-md-offset-2" style="background:rgba(248, 248, 248, 0.37); border-radius:5px; border:solid 1px #eee;">
     <section id="quizz" data-id-quizz="<?php echo $this->registry->router->args[0];?>">
         <div data-id-fb="<?php echo $idFb;?>" style="display:none"></div>
@@ -41,7 +40,7 @@
                     <button data-nb="2" data-state="false" type="button"class="btn btn-default reponse btn-lg" data-id-proposition=""></button>
                 </div>
             </div>
-                
+
             <div class="text-center col-lg-6">
                 <div class="classWithPad">
                     <button data-nb="3" data-state="false" type="button" class="btn btn-default reponse btn-lg" data-id-proposition=""></button>
@@ -56,7 +55,6 @@
         </div>
     </section>
 </div>
-
 <style>
     section#quizz{
         padding: 10px;
@@ -75,17 +73,17 @@
     button.reponse { 
         width:100%;
     }
-    
+
     button.cancel { 
         padding-left:5px;
         padding-right:5px;
     }
-    
+
     button.confirm { 
         padding-left:5px;
         padding-right:5px;
     }
-    
+
     .sweet-alert { 
         padding-top:0;
         margin-top:0px !important;
@@ -93,54 +91,144 @@
         overflow-y:scroll
     }
 </style>
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel" style='text-align:center'><?php echo htmlentities($quizz['name']);?></h4>
+            </div>
+            <div class="modal-body">
+                <div class='row' style='font-style:italic;font-size:14px;text-align:center'>
+                    <div class='col-md-12'></div>
+                    <div class='col-md-5'>
+                        <b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_start'])->format('d/m/Y H:i:s');?></b>
+                    </div>
+                    <div class='col-md-2'>
+                        <i class='fa fa-calendar'></i>
+                    </div>
+                    <div class='col-md-5'>
+                        <b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_end'])->format('d/m/Y H:i:s');?></b>
+                    </div>
+                    <div class='col-md-12'>
+                        <hr>
+                        <p><?php echo htmlentities($quizz['description']);?></p>
+                        <p>Répondez correctement aux <b><?php echo htmlentities($quizz['questions_nb_displayed']);?></b> questions en un minimum de temps pour tenter de remporter <br><b>"<?php echo htmlentities($quizz['lot']);?>"</b> !
+                        </p>
+                        <p>Bonne chance, et que le meilleur gagne !</p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="backToHome">Retour</button>
+                <button type="button" class="btn btn-primary" id="getQuizz">Charger le quizz</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <script>
     $(document).ready(function(){
-        //Si le quizz n'a jamais été fait
-        var quizz = undefined;
-        var welcome_message = "<p>Répondez correctement aux <b><?php echo htmlentities($quizz['questions_nb_displayed']);?></b> questions en un minimum de temps pour tenter de remporter <br><b>\"<?php echo htmlentities($quizz['lot']);?>\"</b> !</p><p>Bonne chance, et que le meilleur gagne !</p>";
-        var availability = "<div class='col-md-12'></div> <div class='col-md-5'><b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_start'])->format('d/m/Y H:i:s');?></b></div><div class='col-md-2'><i class='fa fa-calendar'></i></div><div class='col-md-5'><b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_end'])->format('d/m/Y H:i:s');?></b></div>";
-        swal({
-            title: "",
-            text: "<div class='col-md-12'><b><?php echo htmlentities($quizz['name']);?></b><hr><div class='row' style='font-style:italic;font-size:14px'>"+availability+"</div><hr><?php echo htmlentities($quizz['description']);?><br><p>"+welcome_message+"</p><br><p></p></div>",
-            showCancelButton: true,
-            confirmButtonText: "Charger le quizz",
-            cancelButtonText: "Retour",
-            closeOnConfirm: false,
-            closeOnCancel: false,
-            allowEscapeKey: false,
-            html: true,
-            showLoaderOnConfirm: true
-        }, function(isConfirm){
-            if(isConfirm){
-                //lancer le quizz
-                $.ajax({
-                    url: base_url+'ajax/getQuizzById',
-                    method: 'POST',
-                    data: { id: '<?php echo $this->registry->router->args[0];?>' },
-                    dataType: 'JSON'
-                }).done(function(data, textStatus, jqXHR){
-                    swal({
-                        title: "Quizz chargé !",
-                        text: "Le quizz a été correctement chargé. Cliquer sur \"Commencer\" pour démarrer le quizz et lancer le compte à rebours",
-                        type: "success",
-                        confirmButtonText: "Commencer",
-                        allowEscapeKey: false,
-                        closeOnConfirm: true
-                    },function(){
+
+
+        $('#myModal1').modal({
+            keyboard: false,
+            backdrop: 'static'
+        })
+
+        $('button#getQuizz').click(function(){
+            $(this).unbind('click');
+            $('button#getQuizz').html('<i class="fa fa-spinner fa-spin"></i>');
+            $('button#backToHome').remove();
+            //lancer le quizz
+            $.ajax({
+                url: base_url+'ajax/getQuizzById',
+                method: 'POST',
+                data: { id: '<?php echo $this->registry->router->args[0];?>' },
+                dataType: 'JSON'
+            }).done(function(data, textStatus, jqXHR){
+                $('.modal-body').slideUp('slow', function(){
+                    $('.modal-body').html("<h3 style='text-align:center'>Quizz chargé !</h3><div>Le quizz a été correctement chargé. Cliquer sur \"Commencer\" pour démarrer le quizz et lancer le compte à rebours</div>");
+                    $('button#getQuizz').html("Commencer");
+                    $(this).slideDown('slow');
+                    $('button#getQuizz').click(function(){
+                        $('#myModal1').modal('hide');
                         window.onbeforeunload = function(){ return "Attention, si vous quittez la partie, vous confirmez déclarer forfait et obtiendrez 0 pour ce quizz."};
                         launchQuizz(data.quizz);
                     });
-                }).fail(function(jqXHR, textStatus, errorThrown){
-                    console.error("{"+jqXHR.responseText+"}");
-                    console.error(textStatus);
-                    console.error(errorThrown);
                 });
-
-            }else{
-                //redirection vers la page d'accueil
-                NProgress.start();
-                document.location.href = base_url;
-            }
+            }).fail(function(jqXHR, textStatus, errorThrown){
+                console.error("{"+jqXHR.responseText+"}");
+                console.error(textStatus);
+                console.error(errorThrown);
+            });   
         });
+
+        $('button#backToHome').click(function(){
+            NProgress.start();
+            document.location.href = base_url;
+        });
+
+
+
+
+        //Si le quizz n'a jamais été fait
+//        var quizz = undefined;
+//        var welcome_message = "<p>Répondez correctement aux <b><?php echo htmlentities($quizz['questions_nb_displayed']);?></b> questions en un minimum de temps pour tenter de remporter <br><b>\"<?php echo htmlentities($quizz['lot']);?>\"</b> !</p><p>Bonne chance, et que le meilleur gagne !</p>";
+//        var availability = "<div class='col-md-12'></div> <div class='col-md-5'><b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_start'])->format('d/m/Y H:i:s');?></b></div><div class='col-md-2'><i class='fa fa-calendar'></i></div><div class='col-md-5'><b><?php echo DateTime::createFromFormat('Y-m-d H:i:s', $quizz['date_end'])->format('d/m/Y H:i:s');?></b></div>";
+        //        swal({
+        //            title: "",
+        //            text: "<div class='col-md-12'><b><?php echo htmlentities($quizz['name']);?></b><hr><div class='row' style='font-style:italic;font-size:14px'>"+availability+"</div><hr><?php echo htmlentities($quizz['description']);?><br><p>"+welcome_message+"</p><br><p></p></div>",
+        //            showCancelButton: true,
+        //            confirmButtonText: "Charger le quizz",
+        //            cancelButtonText: "Retour",
+        //            closeOnConfirm: false,
+        //            closeOnCancel: false,
+        //            allowEscapeKey: false,
+        //            html: true,
+        //            showLoaderOnConfirm: true
+        //        }, function(isConfirm){
+        //            if(isConfirm){
+        //                //lancer le quizz
+        //                $.ajax({
+        //                    url: base_url+'ajax/getQuizzById',
+        //                    method: 'POST',
+        //                    data: { id: '<?php echo $this->registry->router->args[0];?>' },
+        //                    dataType: 'JSON'
+        //                }).done(function(data, textStatus, jqXHR){
+        //                    swal({
+        //                        title: "Quizz chargé !",
+        //                        text: "Le quizz a été correctement chargé. Cliquer sur \"Commencer\" pour démarrer le quizz et lancer le compte à rebours",
+        //                        type: "success",
+        //                        confirmButtonText: "Commencer",
+        //                        allowEscapeKey: false,
+        //                        closeOnConfirm: true
+        //                    },function(){
+        //                        window.onbeforeunload = function(){ return "Attention, si vous quittez la partie, vous confirmez déclarer forfait et obtiendrez 0 pour ce quizz."};
+        //                        launchQuizz(data.quizz);
+        //                    });
+        //                }).fail(function(jqXHR, textStatus, errorThrown){
+        //                    console.error("{"+jqXHR.responseText+"}");
+        //                    console.error(textStatus);
+        //                    console.error(errorThrown);
+        //                });
+        //
+        //            }else{
+        //                //redirection vers la page d'accueil
+        //                NProgress.start();
+        //                document.location.href = base_url;
+        //            }
+        //        });
     });
 </script>
