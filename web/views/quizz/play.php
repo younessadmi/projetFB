@@ -58,7 +58,6 @@
 </div>
 
 <style>
-    /* temporaire avant qu'Axel fasse les modif*/
     section#quizz{
         padding: 10px;
         display: none;
