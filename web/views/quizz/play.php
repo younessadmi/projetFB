@@ -99,7 +99,7 @@
 
 
 <!-- Modal -->
-<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -142,10 +142,10 @@
     $(document).ready(function(){
 
 
-        $('#myModal1').modal({
-            keyboard: false,
-            backdrop: 'static'
-        })
+//        $('#myModal1').modal({
+//            keyboard: false,
+//            backdrop: 'static'
+//        })
 
         $('button#getQuizz').click(function(){
             $(this).unbind('click');
@@ -163,7 +163,7 @@
                     $('button#getQuizz').html("Commencer");
                     $(this).slideDown('slow');
                     $('button#getQuizz').click(function(){
-                        $('#myModal1').modal('hide');
+                        $('#myModal1').remove();
                         window.onbeforeunload = function(){ return "Attention, si vous quittez la partie, vous confirmez déclarer forfait et obtiendrez 0 pour ce quizz."};
                         launchQuizz(data.quizz);
                     });
