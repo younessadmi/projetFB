@@ -192,7 +192,6 @@ function endOfQuizz(quizz){
         console.info('Fin du quizz');
         var idQuizz = $('[data-id-quizz]').attr('data-id-quizz');
         var idFb = $('[data-id-fb]').attr('data-id-fb');
-        var quizzName = 
 
         // Modification de la page
         $('#quizz').empty();
@@ -204,7 +203,8 @@ function endOfQuizz(quizz){
             data: { idQuizz: idQuizz, idFb: idFb },
             dataType: 'JSON'
         }).done(function(data, textStatus, jqXHR){
-            $("#quizz").html('<div class="row"><div class="col-md-12"><h3 style="text-align:center">Félicitations, vous avez obtenu un score de <b>'+data.message+'</b> !</h3><br><p style="text-align:center">N\'hésitez pas à partager votre score avec vos amis en cliquant sur le bouton ci-dessous : </p></div><br><div class="col-md-12"><button class="fb-share-button-style"  style="min-width:100%; margin-left:0;" onclick="shareFacebook();"><h2><i class="fa fa-facebook-official"></i> Partager !</h2></button></div>');
+            $("#quizz").html('<div class="row"><div class="col-md-3"></div><div class="col-md-6"  style="text-align:center"><p>'+ data['quizz']['name'] +'</p><img style="display:block; margin-left:auto; margin-right:auto;width:80%" src="'+ data['img'] +'" class="img-responsive" alt="'+ data['quizz']['name'] +'"><a href="http://www.facebook.com/share.php?u='+ data['url'] +'&title=J\'ai eu '+ data["result"]["total"] +' au quizz : '+ data["quizz"]["name"] +' et toi?" class="btn btn-block btn-social btn-facebook" style="display:block; margin-left:auto; margin-right:auto;width:80%" target="_blank"><span class="fa fa-facebook"></span> Partager mon score !</a><h3 style="font-weight:bold">'+ data["result"]["total"] +' points</h3><p> Les résultats seront disponibles dès la fin du quizz,<br> le <b>'+ data["quizz"]["date_end"] +'</b> </p><p>Vous recevrez une notification pour vous prévenir de la publication des résultats et savoir si vous avez gagné <br><b>'+ data["quizz"]["lot"] +'</b>... </p><p>Restez branchés !</p></div><div class="col-md-3"></div></div>');
+            
             NProgress.done();
         }).fail(function(jqXHR, textStatus, errorThrown){
             console.error(jqXHR);

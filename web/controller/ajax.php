@@ -61,8 +61,12 @@ class ajaxController extends baseController {
             $idQuizz = $_POST['idQuizz'];
             if($idPlayer = $this->registry->db->getUserIdByIdFb($idFb)){
                 if($res = $this->registry->db->getResultsByIdQuizz($idQuizz,$idPlayer)){
+                    $idPlayer = $this->registry->db->getUserIdByIdFb($_POST['idFb']);
                     $json_data['success'] = true;
-                    $json_data['message'] = $res[$idPlayer]['total'];
+                    $json_data['quizz'] = $this->registry->db->getInfoQuizz($_POST['idQuizz'])[$_POST['idQuizz']];
+                    $json_data['result'] = $this->registry->db->getResultsByIdQuizz($_POST['idQuizz'], $idPlayer)[$idPlayer];
+                    $json_data['img'] = $this->registry->fb->getLinkPhoto($json_data['quizz']['img']);
+                    $json_data['url'] = BASE_URL;
                 }else $json_data['success'] = false;
             }else $json_data['success'] = false;
 
