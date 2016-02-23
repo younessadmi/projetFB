@@ -98,14 +98,14 @@
                                     </div>
                                 </a>
                             </li>
-                            <li class="divider"></li>
+                            <!--<li class="divider"></li>
                             <li>
                                 <a href="#">
                                     <div style="text-align: center;">
                                         <i class="fa fa-trophy fa-2x"></i>
                                     </div>
                                 </a>
-                            </li>
+                            </li>-->
                             <li class="divider"></li>
                             <li title="Administration">
                                 <a href="<?php echo BASE_URL;?>admin">
